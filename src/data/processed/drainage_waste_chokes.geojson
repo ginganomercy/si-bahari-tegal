@@ -1,0 +1,59 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "WST-TG-01",
+        "lokasi": "Bantaran Muara Kali Ketiwon",
+        "estimasi_volume_m3": 85.0,
+        "karakteristik_sampah": "Plastik kresek, stereofoam & batang bambu",
+        "dampak_hidrologi": "KRITIS (Menyumbat Pintu Air Muara)",
+        "rekomendasi_aksi": "Pemasangan Trash Boom terapung & jadwal pengangkatan berkala Dinas LH"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.142,
+          -6.848
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "WST-TG-02",
+        "lokasi": "Jembatan Kali Kemiri Pasar Pagi",
+        "estimasi_volume_m3": 65.0,
+        "karakteristik_sampah": "Limbah pasar tradisional & sampah rumah tangga",
+        "dampak_hidrologi": "TINGGI (Bottle-neck Kolom Jembatan)",
+        "rekomendasi_aksi": "Pemasangan Trash Boom terapung & jadwal pengangkatan berkala Dinas LH"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.128,
+          -6.868
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "WST-TG-03",
+        "lokasi": "Pertemuan Saluran Sekunder Kali Gung",
+        "estimasi_volume_m3": 50.0,
+        "karakteristik_sampah": "Endapan sampah kebun & kasur/perabot bekas",
+        "dampak_hidrologi": "SEDANG (Menghambat Aliran Masuk Polder)",
+        "rekomendasi_aksi": "Pemasangan Trash Boom terapung & jadwal pengangkatan berkala Dinas LH"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.131,
+          -6.882
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+#!/usr/bin/env python3
+"""
+scripts/generate_qgis_project.py
+--------------------------------
+Generates a ready-to-open QGIS Desktop Project file (.qgs) with
+embedded layer styles, categorizations, and relative paths to processed GeoJSON files.
+"""
+
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUTPUT_QGS = os.path.join(BASE_DIR, "tegal_flood_project.qgs")
+
+qgs_content = """<!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
+<qgis projectname="Peta Risiko Banjir, Genangan & Rob Tegal" version="3.34.0-Prizren">
+  <homePath path=""/>
+  <title>Peta Risiko Banjir, Genangan &amp; Rob Tegal (Hybrid Model)</title>
+  <autotransaction active="0"/>
+  <evaluateDefaultValues active="0"/>
+  <trust active="0"/>
+  <projectCrs>
+    <spatialrefsys nativeFormat="Wkt">
+      <wkt>GEOGCRS["WGS 84",DATUM["World Geodetic System 1984",ELLIPSOID["WGS 84",6378137,298.257223563,LENGTHUNIT["metre",1]]],PRIMEM["Greenwich",0,ANGLEUNIT["degree",0.0174532925199433]],CS[ellipsoidal,2],AXIS["geodetic latitude (Lat)",north,ORDER[1],ANGLEUNIT["degree",0.0174532925199433]],AXIS["geodetic longitude (Lon)",east,ORDER[2],ANGLEUNIT["degree",0.0174532925199433]],USAGE[SCOPE["Horizontal component of 3D system."],AREA["World."],BBOX[-90,-180,90,180]],ID["EPSG",4326]]</wkt>
+      <proj4>+proj=longlat +datum=WGS84 +no_defs</proj4>
+      <srsid>3452</srsid>
+      <srid>4326</srid>
+      <authid>EPSG:4326</authid>
+      <description>WGS 84</description>
+      <projectionacronym>longlat</projectionacronym>
+      <ellipsoidacronym>EPSG:7030</ellipsoidacronym>
+      <geographicflag>true</geographicflag>
+    </spatialrefsys>
+  </projectCrs>
+  <layer-tree-group>
+    <customproperties>
+      <Option/>
+    </customproperties>
+    <layer-tree-layer id="drainage_pts" name="Titik Saluran Kritis (Sedimentasi 45-80 cm)" source="./data/processed/drainage_critical_points.geojson" providerKey="ogr" expanded="1" checked="Qt::Checked"/>
+    <layer-tree-layer id="buildings_3d" name="Jejak Bangunan Perkotaan (3D Footprints)" source="./data/processed/buildings_footprints_tegal.geojson" providerKey="ogr" expanded="0" checked="Qt::Checked"/>
+    <layer-tree-layer id="urban_risk" name="Zonasi Risiko AHP Hilir (Kota Tegal)" source="./data/processed/tegal_hybrid_risk.geojson" providerKey="ogr" expanded="1" checked="Qt::Checked"/>
+    <layer-tree-layer id="guci_risk" name="Zonasi Bahaya Banjir Bandang Hulu (Guci)" source="./data/processed/guci_landslide_risk.geojson" providerKey="ogr" expanded="1" checked="Qt::Checked"/>
+    <custom-order enabled="0">
+      <item>drainage_pts</item>
+      <item>buildings_3d</item>
+      <item>urban_risk</item>
+      <item>guci_risk</item>
+    </custom-order>
+  </layer-tree-group>
+  <projectlayers>
+    <maplayer type="vector" id="drainage_pts" name="Titik Saluran Kritis (Sedimentasi 45-80 cm)" geometry="Point">
+      <datasource>./data/processed/drainage_critical_points.geojson</datasource>
+      <renderer-v2 type="singleSymbol">
+        <symbols>
+          <symbol type="marker" name="0" alpha="1">
+            <layer class="SimpleMarker" pass="0" locked="0">
+              <prop k="color" v="239,68,68,255"/>
+              <prop k="size" v="4.0"/>
+              <prop k="outline_color" v="255,255,255,255"/>
+              <prop k="outline_width" v="0.8"/>
+            </layer>
+          </symbol>
+        </symbols>
+      </renderer-v2>
+    </maplayer>
+    <maplayer type="vector" id="buildings_3d" name="Jejak Bangunan Perkotaan (3D Footprints)" geometry="Polygon">
+      <datasource>./data/processed/buildings_footprints_tegal.geojson</datasource>
+      <renderer-v2 type="singleSymbol">
+        <symbols>
+          <symbol type="fill" name="0" alpha="0.75">
+            <layer class="SimpleFill" pass="0" locked="0">
+              <prop k="color" v="148,163,184,255"/>
+              <prop k="outline_color" v="100,116,139,255"/>
+              <prop k="outline_width" v="0.2"/>
+            </layer>
+          </symbol>
+        </symbols>
+      </renderer-v2>
+    </maplayer>
+    <maplayer type="vector" id="urban_risk" name="Zonasi Risiko AHP Hilir (Kota Tegal)" geometry="Polygon">
+      <datasource>./data/processed/tegal_hybrid_risk.geojson</datasource>
+      <renderer-v2 type="singleSymbol">
+        <symbols>
+          <symbol type="fill" name="0" alpha="0.45">
+            <layer class="SimpleFill" pass="0" locked="0">
+              <prop k="color" v="234,179,8,255"/>
+              <prop k="outline_color" v="202,138,4,255"/>
+              <prop k="outline_width" v="0.8"/>
+            </layer>
+          </symbol>
+        </symbols>
+      </renderer-v2>
+    </maplayer>
+    <maplayer type="vector" id="guci_risk" name="Zonasi Bahaya Banjir Bandang Hulu (Guci)" geometry="Polygon">
+      <datasource>./data/processed/guci_landslide_risk.geojson</datasource>
+      <renderer-v2 type="singleSymbol">
+        <symbols>
+          <symbol type="fill" name="0" alpha="0.5">
+            <layer class="SimpleFill" pass="0" locked="0">
+              <prop k="color" v="220,38,38,255"/>
+              <prop k="outline_color" v="185,28,28,255"/>
+              <prop k="outline_width" v="1.0"/>
+            </layer>
+          </symbol>
+        </symbols>
+      </renderer-v2>
+    </maplayer>
+  </projectlayers>
+</qgis>
+"""
+
+with open(OUTPUT_QGS, "w", encoding="utf-8") as f:
+    f.write(qgs_content.strip())
+
+print(f"Generated QGIS Project file: {OUTPUT_QGS}")
+

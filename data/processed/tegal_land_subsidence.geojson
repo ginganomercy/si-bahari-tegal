@@ -1,0 +1,125 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SUB-TG-01",
+        "nama_zona": "Pesisir Muarareja & Pelabuhan Tegalsari",
+        "laju_penurunan_cm_tahun": 5.2,
+        "formasi_geologi": "Aluvium Pantai Muda Lunak",
+        "faktor_penyebab": "Beban fisik pelabuhan & ekstraksi air tanah industri perikanan",
+        "akumulasi_penurunan_10th_cm": 52.0,
+        "tingkat_urgensi": "KRITIS TINGGI",
+        "rekomendasi_mitigasi": "Moratorium sumur dalam & peninggian tanggul polder"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.11,
+              -6.832
+            ],
+            [
+              109.148,
+              -6.838
+            ],
+            [
+              109.148,
+              -6.858
+            ],
+            [
+              109.11,
+              -6.855
+            ],
+            [
+              109.11,
+              -6.832
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SUB-TG-02",
+        "nama_zona": "Dataran Rendah Kaligangsa & Pesurungan",
+        "laju_penurunan_cm_tahun": 3.4,
+        "formasi_geologi": "Sedimen Lanau Lempungan Dataran Banjir",
+        "faktor_penyebab": "Konsolidasi tanah aluvial & drainase tambak intensif",
+        "akumulasi_penurunan_10th_cm": 34.0,
+        "tingkat_urgensi": "SEDANG WASPADA",
+        "rekomendasi_mitigasi": "Moratorium sumur dalam & peninggian tanggul polder"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.075,
+              -6.85
+            ],
+            [
+              109.112,
+              -6.852
+            ],
+            [
+              109.115,
+              -6.875
+            ],
+            [
+              109.075,
+              -6.875
+            ],
+            [
+              109.075,
+              -6.85
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SUB-TG-03",
+        "nama_zona": "Koridor Pesisir Timur Panggung",
+        "laju_penurunan_cm_tahun": 4.1,
+        "formasi_geologi": "Gisik Pantai & Rawa Pasut",
+        "faktor_penyebab": "Konversi tambak ke permukiman padat",
+        "akumulasi_penurunan_10th_cm": 41.0,
+        "tingkat_urgensi": "TINGGI",
+        "rekomendasi_mitigasi": "Moratorium sumur dalam & peninggian tanggul polder"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.145,
+              -6.84
+            ],
+            [
+              109.175,
+              -6.842
+            ],
+            [
+              109.175,
+              -6.865
+            ],
+            [
+              109.145,
+              -6.862
+            ],
+            [
+              109.145,
+              -6.84
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

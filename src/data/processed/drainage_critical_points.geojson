@@ -1,0 +1,311 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DRN-TG-001",
+        "kelurahan": "Debong Kidul",
+        "lokasi": "Saluran Sekunder Jl. Teuku Cik Ditiro (STA 0+450)",
+        "tipe_saluran": "Saluran Sekunder Pasangan Batu Kali",
+        "sediment_depth_cm": 65.0,
+        "lebar_saluran_m": 2.5,
+        "kedalaman_saluran_m": 1.8,
+        "panjang_saluran_m": 600.0,
+        "volume_sedimen_m3": 975.0,
+        "ritase_dump_truck": 163,
+        "debit_rencana_m3s": 4.2,
+        "debit_eksisting_m3s": 1.15,
+        "capacity_loss_pct": 72.6,
+        "kk_terdampak": 420,
+        "estimasi_kerugian_juta_rp": 850.0,
+        "clogging_source": "Sedimentasi lumpur lempung padat & sampah plastik domestik",
+        "flood_history_depth_cm": 45.0,
+        "sop_alat_berat": "Excavator PC-50 Long-Arm + 4 Dump Truck 6m\u00b3",
+        "durasi_pengerjaan_hari": 14,
+        "instansi_penanggung_jawab": "Dinas PUPR Kota Tegal Bidang SDA",
+        "tingkat_kegawatan": "KRITIS (Prioritas 1)",
+        "anggaran_estimasi_pengerukan_juta_rp": 113.8
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.1235,
+          -6.8912
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DRN-TG-002",
+        "kelurahan": "Tunon",
+        "lokasi": "Saluran Tersier Pemukiman RW 02 (STA 0+180)",
+        "tipe_saluran": "Saluran Tersier U-Ditch Tertutup",
+        "sediment_depth_cm": 75.0,
+        "lebar_saluran_m": 1.6,
+        "kedalaman_saluran_m": 1.2,
+        "panjang_saluran_m": 450.0,
+        "volume_sedimen_m3": 540.0,
+        "ritase_dump_truck": 90,
+        "debit_rencana_m3s": 2.1,
+        "debit_eksisting_m3s": 0.35,
+        "capacity_loss_pct": 83.3,
+        "kk_terdampak": 310,
+        "estimasi_kerugian_juta_rp": 420.0,
+        "clogging_source": "Penyempitan lebar saluran dan endapan tanah kebun warga",
+        "flood_history_depth_cm": 50.0,
+        "sop_alat_berat": "Manual Pengerukan Tenaga Kerja (PUPR) + Mini Tipper",
+        "durasi_pengerjaan_hari": 10,
+        "instansi_penanggung_jawab": "Dinas PUPR Kota Tegal & Kelurahan Tunon",
+        "tingkat_kegawatan": "KRITIS (Prioritas 1)",
+        "anggaran_estimasi_pengerukan_juta_rp": 131.2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.1189,
+          -6.8856
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DRN-TG-003",
+        "kelurahan": "Tegalsari",
+        "lokasi": "Muara Drainase Pesisir Pelabuhan Perikanan (STA 0+050)",
+        "tipe_saluran": "Saluran Primer Terbuka Muara Laut",
+        "sediment_depth_cm": 80.0,
+        "lebar_saluran_m": 4.5,
+        "kedalaman_saluran_m": 2.5,
+        "panjang_saluran_m": 850.0,
+        "volume_sedimen_m3": 3060.0,
+        "ritase_dump_truck": 510,
+        "debit_rencana_m3s": 12.5,
+        "debit_eksisting_m3s": 2.2,
+        "capacity_loss_pct": 82.4,
+        "kk_terdampak": 1150,
+        "estimasi_kerugian_juta_rp": 2400.0,
+        "clogging_source": "Sedimentasi pasir laut (littoral drift) + pasang rob harian",
+        "flood_history_depth_cm": 65.0,
+        "sop_alat_berat": "Amphibious Dredger BBWS Pemali-Juana + Ponton Keruk",
+        "durasi_pengerjaan_hari": 30,
+        "instansi_penanggung_jawab": "BBWS Pemali-Juana & Dinas PUPR Kota Tegal",
+        "tingkat_kegawatan": "KRITIS (Prioritas 1)",
+        "anggaran_estimasi_pengerukan_juta_rp": 140.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.1362,
+          -6.8521
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DRN-TG-004",
+        "kelurahan": "Sumurpanggang",
+        "lokasi": "Saluran Pembuang Kali Kemiri (STA 1+100)",
+        "tipe_saluran": "Saluran Sekunder Tanah Terbuka",
+        "sediment_depth_cm": 55.0,
+        "lebar_saluran_m": 3.0,
+        "kedalaman_saluran_m": 1.8,
+        "panjang_saluran_m": 500.0,
+        "volume_sedimen_m3": 825.0,
+        "ritase_dump_truck": 138,
+        "debit_rencana_m3s": 5.4,
+        "debit_eksisting_m3s": 2.1,
+        "capacity_loss_pct": 61.1,
+        "kk_terdampak": 480,
+        "estimasi_kerugian_juta_rp": 670.0,
+        "clogging_source": "Sedimentasi lumpur kiriman banjir hulu Kabupaten",
+        "flood_history_depth_cm": 45.0,
+        "sop_alat_berat": "Excavator Standard PC-200 + 3 Dump Truck 8m\u00b3",
+        "durasi_pengerjaan_hari": 12,
+        "instansi_penanggung_jawab": "Dinas PUPR Kota Tegal",
+        "tingkat_kegawatan": "WASPADA (Prioritas 2)",
+        "anggaran_estimasi_pengerukan_juta_rp": 96.2
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.1025,
+          -6.8789
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DRN-TG-005",
+        "kelurahan": "Pesurungan Lor",
+        "lokasi": "Saluran Induk Jl. Mataram (STA 0+750)",
+        "tipe_saluran": "Saluran Primer Pasangan Batu Kali",
+        "sediment_depth_cm": 70.0,
+        "lebar_saluran_m": 3.2,
+        "kedalaman_saluran_m": 2.0,
+        "panjang_saluran_m": 700.0,
+        "volume_sedimen_m3": 1568.0,
+        "ritase_dump_truck": 262,
+        "debit_rencana_m3s": 7.8,
+        "debit_eksisting_m3s": 2.15,
+        "capacity_loss_pct": 72.4,
+        "kk_terdampak": 620,
+        "estimasi_kerugian_juta_rp": 1250.0,
+        "clogging_source": "Penyumbatan sampah anorganik & endapan lempung industri",
+        "flood_history_depth_cm": 55.0,
+        "sop_alat_berat": "Excavator PC-75 + Truk Compactor Sampah DLH",
+        "durasi_pengerjaan_hari": 16,
+        "instansi_penanggung_jawab": "Dinas PUPR & Dinas Lingkungan Hidup Kota Tegal",
+        "tingkat_kegawatan": "KRITIS (Prioritas 1)",
+        "anggaran_estimasi_pengerukan_juta_rp": 122.5
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.1128,
+          -6.8615
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DRN-TG-006",
+        "kelurahan": "Pesurungan Kidul",
+        "lokasi": "Gorong-gorong Silang Rel Kereta Api (STA 0+320)",
+        "tipe_saluran": "Box Culvert Beton Ganda (2x 1.5m)",
+        "sediment_depth_cm": 68.0,
+        "lebar_saluran_m": 3.0,
+        "kedalaman_saluran_m": 1.5,
+        "panjang_saluran_m": 250.0,
+        "volume_sedimen_m3": 510.0,
+        "ritase_dump_truck": 85,
+        "debit_rencana_m3s": 4.8,
+        "debit_eksisting_m3s": 1.45,
+        "capacity_loss_pct": 69.8,
+        "kk_terdampak": 390,
+        "estimasi_kerugian_juta_rp": 580.0,
+        "clogging_source": "Bottle-neck gorong-gorong rel KA tertutup endapan lumpur",
+        "flood_history_depth_cm": 48.0,
+        "sop_alat_berat": "Water Jet Flushing High-Pressure + Manual Sludge Sucker",
+        "durasi_pengerjaan_hari": 7,
+        "instansi_penanggung_jawab": "Dinas PUPR Kota Tegal & PT KAI Daop 4",
+        "tingkat_kegawatan": "KRITIS (Prioritas 1)",
+        "anggaran_estimasi_pengerukan_juta_rp": 119.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.1105,
+          -6.8718
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DRN-TG-007",
+        "kelurahan": "Kalinyamat Kulon",
+        "lokasi": "Saluran Drainase Perbatasan Sawah RW 03 (STA 0+400)",
+        "tipe_saluran": "Saluran Tanah Alami",
+        "sediment_depth_cm": 50.0,
+        "lebar_saluran_m": 2.0,
+        "kedalaman_saluran_m": 1.4,
+        "panjang_saluran_m": 400.0,
+        "volume_sedimen_m3": 400.0,
+        "ritase_dump_truck": 67,
+        "debit_rencana_m3s": 2.8,
+        "debit_eksisting_m3s": 1.25,
+        "capacity_loss_pct": 55.4,
+        "kk_terdampak": 240,
+        "estimasi_kerugian_juta_rp": 310.0,
+        "clogging_source": "Longsoran tebing saluran tanah & gulma eceng gondok",
+        "flood_history_depth_cm": 35.0,
+        "sop_alat_berat": "Normalisasi Profil Saluran + Pemasangan Talud Bronjong",
+        "durasi_pengerjaan_hari": 15,
+        "instansi_penanggung_jawab": "Dinas PUPR Kota Tegal",
+        "tingkat_kegawatan": "WASPADA (Prioritas 2)",
+        "anggaran_estimasi_pengerukan_juta_rp": 87.5
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.1138,
+          -6.8942
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DRN-TG-008",
+        "kelurahan": "Kaligangsa",
+        "lokasi": "Saluran Pembuang Kali Ketiwon Barat (STA 0+150)",
+        "tipe_saluran": "Saluran Primer Muara Estuari",
+        "sediment_depth_cm": 78.0,
+        "lebar_saluran_m": 4.2,
+        "kedalaman_saluran_m": 2.2,
+        "panjang_saluran_m": 800.0,
+        "volume_sedimen_m3": 2620.8,
+        "ritase_dump_truck": 437,
+        "debit_rencana_m3s": 9.5,
+        "debit_eksisting_m3s": 1.85,
+        "capacity_loss_pct": 80.5,
+        "kk_terdampak": 870,
+        "estimasi_kerugian_juta_rp": 1750.0,
+        "clogging_source": "Sedimen lumpur tambak & pasang rob backwater",
+        "flood_history_depth_cm": 58.0,
+        "sop_alat_berat": "Excavator Long-Arm BBWS + Pembuatan Pintu Klep Otomatis",
+        "durasi_pengerjaan_hari": 21,
+        "instansi_penanggung_jawab": "BBWS Pemali-Juana & Dinas PUPR Kota Tegal",
+        "tingkat_kegawatan": "KRITIS (Prioritas 1)",
+        "anggaran_estimasi_pengerukan_juta_rp": 136.5
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.0875,
+          -6.8672
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "DRN-TG-009",
+        "kelurahan": "Krandon",
+        "lokasi": "Saluran Pemukiman Jl. Abdul Syukur (STA 0+250)",
+        "tipe_saluran": "Saluran Sekunder Pasangan Batu",
+        "sediment_depth_cm": 48.0,
+        "lebar_saluran_m": 1.8,
+        "kedalaman_saluran_m": 1.3,
+        "panjang_saluran_m": 350.0,
+        "volume_sedimen_m3": 302.4,
+        "ritase_dump_truck": 51,
+        "debit_rencana_m3s": 2.4,
+        "debit_eksisting_m3s": 1.2,
+        "capacity_loss_pct": 50.0,
+        "kk_terdampak": 290,
+        "estimasi_kerugian_juta_rp": 380.0,
+        "clogging_source": "Pertumbuhan eceng gondok & endapan lumpur domestik",
+        "flood_history_depth_cm": 30.0,
+        "sop_alat_berat": "Pembersihan Gulma Mekanis + Penggelontoran Pintu Air",
+        "durasi_pengerjaan_hari": 6,
+        "instansi_penanggung_jawab": "Dinas Lingkungan Hidup & PUPR Kota Tegal",
+        "tingkat_kegawatan": "WASPADA (Prioritas 2)",
+        "anggaran_estimasi_pengerukan_juta_rp": 84.0
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          109.0975,
+          -6.8645
+        ]
+      }
+    }
+  ]
+}

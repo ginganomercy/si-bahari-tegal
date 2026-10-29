@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SI-BAHARI 3D — Sistem Informasi Banjir, Amblesan & Hidrologi Pesisir Kota Tegal</title>
+
+  <!-- Pinned Stable MapLibre GL JS v4.7.1 -->
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+  <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+
+  <!-- Tailwind CSS Official CDN with Enterprise Light Config -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              900: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Base Custom Overrides (Light Mode) -->
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased overflow-hidden w-screen h-screen">
+
+  <!-- ======================================================================
+       1. TOP APPLICATION BAR (Enterprise Light Mode & Pure SVG Vectors)
+       ====================================================================== -->
+  <header class="absolute top-0 left-0 right-0 h-14 bg-white/95 backdrop-blur-md border-b border-slate-200/90 px-4 flex items-center justify-between z-40 shadow-sm">
+    <!-- Left: Hamburger & Brand -->
+    <div class="flex items-center gap-3">
+      <button id="btn-toggle-drawer" class="w-9 h-9 rounded-lg bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-slate-900 flex items-center justify-center transition-all cursor-pointer shadow-sm" title="Buka/Tutup Menu">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+
+      <div class="flex flex-col">
+        <div class="flex items-center gap-2">
+          <span class="font-black text-sm tracking-wide text-slate-900">SI-BAHARI 3D</span>
+          <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200 uppercase tracking-wider">Digital Twin Kota Tegal</span>
+        </div>
+        <span class="text-[11px] text-slate-500 font-medium">Sistem Simulasi Banjir Rob, Amblesan Tanah & Hidrologi Pesisir</span>
+      </div>
+    </div>
+
+    <!-- Center: Zone Switcher Pills (SVG Vectors) -->
+    <div class="hidden md:flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 gap-1">
+      <button id="btn-zone-tegal" class="px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-sky-800 bg-white shadow-sm border border-slate-200 cursor-pointer flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5 stroke-current" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2M3 19c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2"/></svg>
+        <span>Pesisir & Dataran Tegal</span>
+      </button>
+      <button id="btn-zone-guci" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all cursor-pointer flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5 stroke-current" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21l8-16 8 16H3zM9 21l3-6 3 6"/></svg>
+        <span>Hulu Lereng Guci</span>
+      </button>
+    </div>
+
+    <!-- Right: Basemap Selector & Actions (SVG Vectors) -->
+    <div class="flex items-center gap-2">
+      <select id="select-basemap" class="bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm outline-none cursor-pointer">
+        <option value="GOOGLE_SATELLITE" selected>Satelit HD Murni (Bersih / Tanpa POI)</option>
+        <option value="ESRI_SATELLITE">Satelit Global (ESRI)</option>
+        <option value="STREET">Peta Jalan Administrasi (OSM)</option>
+        <option value="DARK">Mode Gelap (CARTO)</option>
+      </select>
+
+      <button id="btn-open-tutorial" class="w-9 h-9 rounded-lg bg-sky-50 hover:bg-sky-100 border border-sky-200 text-sky-700 hover:text-sky-900 flex items-center justify-center transition-all cursor-pointer shadow-sm" title="Tutorial Interaktif (Panduan 5 Langkah)">
+        <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+      </button>
+
+      <button id="btn-open-guide" class="w-9 h-9 rounded-lg bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-slate-900 flex items-center justify-center transition-all cursor-pointer shadow-sm" title="Tentang SI-BAHARI 3D & Panduan Sistem">
+        <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </button>
+
+      <button id="btn-reset-north" class="w-9 h-9 rounded-lg bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-slate-900 flex items-center justify-center transition-all cursor-pointer shadow-sm" title="Reset Kompas Utara">
+        <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><polygon points="16,8 13.5,13.5 8,16 10.5,10.5" fill="currentColor"/></svg>
+      </button>
+      <button id="btn-fullscreen" class="w-9 h-9 rounded-lg bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 hover:text-slate-900 flex items-center justify-center transition-all cursor-pointer shadow-sm" title="Layar Penuh">
+        <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       2. FULLSCREEN 3D MAP CANVAS
+       ====================================================================== -->
+  <div id="map" class="absolute top-14 left-0 right-0 bottom-0 z-0"></div>
+
+  <!-- ======================================================================
+       3. LEFT COLLAPSIBLE APP DRAWER (Light Theme & SVG Vector Tabs)
+       ====================================================================== -->
+  <aside id="app-drawer" class="absolute top-14 left-0 bottom-0 w-96 bg-white/95 backdrop-blur-xl border-r border-slate-200 z-30 flex flex-col shadow-xl transition-transform duration-300 ease-in-out">
+    <!-- Tabs Header -->
+    <nav class="flex bg-slate-50 border-b border-slate-200">
+      <button class="tab-btn active flex-1 py-3 text-xs font-bold text-sky-600 border-b-2 border-sky-600 bg-white flex flex-col items-center gap-1.5 transition-all" data-tab="tab-analytics">
+        <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        <span>Dampak & Air</span>
+      </button>
+      <button class="tab-btn flex-1 py-3 text-xs font-semibold text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex flex-col items-center gap-1.5 transition-all" data-tab="tab-layers">
+        <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        <span>Faktor Kausal</span>
+      </button>
+      <button id="btn-tab-drainage" class="tab-btn flex-1 py-3 text-xs font-semibold text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex flex-col items-center gap-1.5 transition-all" data-tab="tab-drainage">
+        <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <span>Saluran & Sampah</span>
+      </button>
+      <button class="tab-btn flex-1 py-3 text-xs font-semibold text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex flex-col items-center gap-1.5 transition-all" data-tab="tab-table">
+        <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        <span>Wilayah & SOP</span>
+      </button>
+    </nav>
+
+    <!-- Tabs Content Container -->
+    <div class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar text-slate-700">
+
+      <!-- TAB 1: IMPACT & DYNAMIC WATER SIMULATION -->
+      <section id="tab-analytics" class="tab-pane space-y-3.5">
+        
+        <!-- Fast Disaster Presets (Skenario Cepat Tanggap Bencana) -->
+        <div id="container-scenario-presets" class="space-y-1.5">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-sky-700 flex items-center justify-between">
+            <span>Skenario Cepat Tanggap Bencana</span>
+            <span class="text-[10px] text-slate-500 font-normal">PUPR / BPBD</span>
+          </div>
+          <div class="grid grid-cols-3 gap-1.5">
+            <button type="button" class="btn-scenario-preset bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-lg p-2 text-left flex flex-col justify-between transition-all cursor-pointer shadow-sm" data-scenario="SPRING_TIDE" title="Skenario Pasang Purnama +1.4m">
+              <div class="flex items-center justify-between w-full">
+                <svg class="w-3.5 h-3.5 text-sky-600 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2"/></svg>
+                <span class="text-[10px] font-bold text-sky-700 bg-sky-50 px-1 rounded border border-sky-200">+1.4m</span>
+              </div>
+              <span class="text-[10px] font-semibold text-slate-800 mt-1 leading-tight">Pasang Purnama</span>
+            </button>
+
+            <button type="button" class="btn-scenario-preset bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-lg p-2 text-left flex flex-col justify-between transition-all cursor-pointer shadow-sm" data-scenario="EXTREME_RAIN" title="Skenario Hujan Lokal Badai +0.8m">
+              <div class="flex items-center justify-between w-full">
+                <svg class="w-3.5 h-3.5 text-amber-600 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+                <span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-1 rounded border border-amber-200">+0.8m</span>
+              </div>
+              <span class="text-[10px] font-semibold text-slate-800 mt-1 leading-tight">Hujan Badai</span>
+            </button>
+
+            <button type="button" class="btn-scenario-preset bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 rounded-lg p-2 text-left flex flex-col justify-between transition-all cursor-pointer shadow-sm" data-scenario="COMPOUND_FLOOD" title="Skenario Terburuk: Rob + Hujan + Pompa Mati">
+              <div class="flex items-center justify-between w-full">
+                <svg class="w-3.5 h-3.5 text-rose-600 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                <span class="text-[10px] font-bold text-rose-700 bg-rose-50 px-1 rounded border border-rose-200">+2.0m</span>
+              </div>
+              <span class="text-[10px] font-semibold text-rose-900 mt-1 leading-tight">Compound</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Polder Pump Station Control Card -->
+        <div id="polder-pump-card" class="bg-white border border-slate-200 rounded-xl p-3 shadow-sm space-y-2">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <div class="w-6 h-6 rounded-lg bg-sky-50 border border-sky-200 text-sky-700 flex items-center justify-center">
+                <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              </div>
+              <div>
+                <div class="text-xs font-bold text-slate-900 leading-none">Pompa Polder Tegalsari</div>
+                <div class="text-[10px] text-slate-500 mt-0.5">Kolam Retensi 45.000 m³</div>
+              </div>
+            </div>
+            <div id="pump-status-badge" class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1.5 shadow-sm">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>AKTIF (3x 500 L/s)</span>
+            </div>
+          </div>
+
+          <!-- Switch & Status -->
+          <div class="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5">
+            <span class="text-xs font-semibold text-slate-700">Operasi Pompa (Normal vs Gagal)</span>
+            <label class="relative inline-flex items-center cursor-pointer">
+              <input type="checkbox" id="toggle-polder-pump" checked class="sr-only peer">
+              <div class="w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-emerald-600"></div>
+            </label>
+          </div>
+
+          <p id="pump-capacity-note" class="text-[10px] text-slate-500 leading-snug">
+            3 Unit pompa submersible beroperasi penuh. Kolam retensi aktif membuang debit ke laut.
+          </p>
+
+          <div class="flex items-center justify-between pt-1 border-t border-slate-100">
+            <span class="text-[10px] text-slate-400">DPUPR Kota Tegal & BBWS</span>
+            <button type="button" id="btn-inspect-polder" class="text-[10px] text-sky-700 hover:text-sky-900 font-bold flex items-center gap-1 cursor-pointer">
+              <span>Lembar Teknis Polder</span>
+              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="text-[11px] font-bold uppercase tracking-wider text-sky-700 flex items-center justify-between pt-1">
+          <span>Dampak Bencana Real-Time</span>
+          <span class="text-slate-500 font-normal">AHP + Dynamic Water</span>
+        </div>
+
+        <!-- 4 Metric Cards (Light Mode) -->
+        <div class="grid grid-cols-2 gap-2.5">
+          <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-sm hover:border-sky-300 transition-all flex flex-col">
+            <span id="metric-submerged-buildings" class="text-2xl font-black text-slate-900">0</span>
+            <span class="text-[11px] text-slate-500 font-medium mt-1">Bangunan Terendam (3D)</span>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-sm hover:border-sky-300 transition-all flex flex-col">
+            <span id="metric-affected-kelurahans" class="text-2xl font-black text-slate-900">0 Kelurahan</span>
+            <span class="text-[11px] text-slate-500 font-medium mt-1">Kelurahan Tergenang</span>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-sm hover:border-amber-300 transition-all flex flex-col">
+            <span class="text-2xl font-black text-amber-600">9 Titik</span>
+            <span class="text-[11px] text-slate-500 font-medium mt-1">Saluran Kritis Sedimen</span>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-sm hover:border-purple-300 transition-all flex flex-col">
+            <span class="text-2xl font-black text-purple-600">5.2 cm/th</span>
+            <span class="text-[11px] text-slate-500 font-medium mt-1">Amblesan Maksimum</span>
+          </div>
+        </div>
+
+        <!-- Alert Status Card -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex items-center justify-between shadow-sm">
+          <div>
+            <div class="text-xs font-bold text-slate-800">STATUS PERINGATAN DINI</div>
+            <div class="text-[11px] text-slate-500 mt-0.5">Kondisi Elevasi Pasang Air Laut Pesisir</div>
+          </div>
+          <div id="alert-status-badge" class="text-xs font-bold px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200">
+            AMAN: NORMAL
+          </div>
+        </div>
+
+        <!-- Demographic & Hydrological Summary -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-2 text-xs shadow-sm">
+          <div class="font-bold text-slate-800">Peta Kausalitas Multi-Bencana:</div>
+          <p class="text-slate-600 leading-relaxed text-[11px]">
+            <strong class="text-slate-800">Pesisir Hilir (0–3 mdpl):</strong> Genangan diperparah oleh amblesan tanah (2.5–5.2 cm/th di Tegalsari & Muarareja), intrusi air asin hingga 1.5 km yang merusak sumur warga, dan sedimentasi saluran sekunder (45–80 cm).
+          </p>
+          <p class="text-slate-600 leading-relaxed text-[11px]">
+            <strong class="text-slate-800">Hulu Lereng Guci (>700 mdpl):</strong> Kelerengan terjal (>35°) dan konversi lahan hutan di lereng Gunung Slamet mempercepat limpasan air hujan menuju dataran kota Tegal.
+          </p>
+        </div>
+      </section>
+
+      <!-- TAB 2: CAUSAL DRIVERS & LAYER TOGGLES -->
+      <section id="tab-layers" class="tab-pane hidden space-y-4">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-sky-700">Kontrol Lapisan & Faktor Pemicu</div>
+
+        <div class="space-y-2">
+          <!-- Causal Driver 1: Urban Risk & Labels -->
+          <div class="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-medium shadow-sm hover:border-slate-300">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-rose-500"></span>
+              <span>Zonasi Risiko Banjir & Rob (AHP)</span>
+            </div>
+            <input type="checkbox" id="toggle-hazard" checked class="w-4 h-4 accent-sky-600 cursor-pointer">
+          </div>
+
+          <!-- Causal Driver 2: Land Subsidence -->
+          <div class="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-medium shadow-sm hover:border-slate-300">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-purple-600"></span>
+              <span>Penurunan Tanah (2.5–5.2 cm/th)</span>
+            </div>
+            <input type="checkbox" id="toggle-subsidence" checked class="w-4 h-4 accent-sky-600 cursor-pointer">
+          </div>
+
+          <!-- Causal Driver 3: Saline Intrusion -->
+          <div class="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-medium shadow-sm hover:border-slate-300">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+              <span>Sabuk Intrusi Air Asin (1.5 km Pesisir)</span>
+            </div>
+            <input type="checkbox" id="toggle-saline" checked class="w-4 h-4 accent-sky-600 cursor-pointer">
+          </div>
+
+          <!-- Causal Driver 4: Drainage Bottlenecks -->
+          <div class="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-medium shadow-sm hover:border-slate-300">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-red-600"></span>
+              <span>Titik Saluran Kritis (Sedimen Lumpur)</span>
+            </div>
+            <input type="checkbox" id="toggle-drainage" checked class="w-4 h-4 accent-sky-600 cursor-pointer">
+          </div>
+
+          <!-- Causal Driver 5: Solid Waste Choke Points -->
+          <div class="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-medium shadow-sm hover:border-slate-300">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-orange-600"></span>
+              <span>Titik Tumpukan Sampah Saluran</span>
+            </div>
+            <input type="checkbox" id="toggle-waste" checked class="w-4 h-4 accent-sky-600 cursor-pointer">
+          </div>
+
+          <!-- Physical 3D Buildings -->
+          <div class="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-medium shadow-sm hover:border-slate-300">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-slate-400"></span>
+              <span>Bangunan 3D (Extrusion)</span>
+            </div>
+            <input type="checkbox" id="toggle-buildings" checked class="w-4 h-4 accent-sky-600 cursor-pointer">
+          </div>
+
+          <!-- Dynamic Water Layer -->
+          <div class="flex items-center justify-between bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-medium shadow-sm hover:border-slate-300">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-sky-500"></span>
+              <span>Permukaan Air Pasang Rob 3D</span>
+            </div>
+            <input type="checkbox" id="toggle-water" checked class="w-4 h-4 accent-sky-600 cursor-pointer">
+          </div>
+        </div>
+
+        <div class="text-[11px] font-bold uppercase tracking-wider text-sky-700 pt-2">Legenda Simbologi Terpadu</div>
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-2 text-xs shadow-sm">
+          <div class="flex items-center gap-2.5">
+            <div class="w-3.5 h-3.5 rounded bg-rose-500 shrink-0"></div>
+            <span class="text-slate-700">Risiko Tinggi Genangan (AHP &ge; 0.70 / Sedimen &ge; 60 cm)</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-3.5 h-3.5 rounded bg-purple-600 shrink-0"></div>
+            <span class="text-slate-700">Penurunan Tanah Kritis (4.5–5.2 cm/tahun)</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-3.5 h-3.5 rounded bg-amber-500 shrink-0"></div>
+            <span class="text-slate-700">Zona Intrusi Air Asin (Salinitas &ge; 2.5 ppt)</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-3.5 h-3.5 rounded bg-orange-600 shrink-0"></div>
+            <span class="text-slate-700">Akumulasi Sampah Liar (Volume &ge; 50 m³)</span>
+          </div>
+          <div class="flex items-center gap-2.5">
+            <div class="w-3.5 h-3.5 rounded bg-sky-500 shrink-0"></div>
+            <span class="text-slate-700">Cekungan Air Pasang Rob 3D</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: DRAINAGE BOTTLENECKS & SOLID WASTE CHOKES -->
+      <section id="tab-drainage" class="tab-pane hidden space-y-3">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-sky-700 flex items-center justify-between">
+          <span>Infrastruktur & Titik Hambatan</span>
+          <span class="text-[10px] text-slate-500">Klik untuk Inspeksi</span>
+        </div>
+
+        <!-- Section: Drainage Sediments -->
+        <div class="space-y-1.5">
+          <div class="text-[10px] font-extrabold uppercase text-slate-500 flex items-center gap-1">
+            <svg class="w-3.5 h-3.5 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+            <span>9 Titik Saluran Kritis Sedimen (PUPR)</span>
+          </div>
+          <div id="drainage-list-container" class="space-y-2">
+            <!-- Populated dynamically via main.js -->
+          </div>
+        </div>
+
+        <!-- Section: Solid Waste Choke Points -->
+        <div class="space-y-1.5 pt-2">
+          <div class="text-[10px] font-extrabold uppercase text-slate-500 flex items-center gap-1">
+            <svg class="w-3.5 h-3.5 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            <span>3 Titik Tumpukan Sampah Saluran (DLH)</span>
+          </div>
+          <div id="waste-list-container" class="space-y-2">
+            <!-- Populated dynamically via main.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: COMPARATIVE REGIONAL DATA TABLE & PUPR SOP -->
+      <section id="tab-table" class="tab-pane hidden space-y-3">
+        <div class="text-[11px] font-bold uppercase tracking-wider text-sky-700">
+          Peringkat Kerentanan Kelurahan Kota Tegal
+        </div>
+        <div class="overflow-x-auto rounded-lg border border-slate-200 shadow-sm bg-white">
+          <table class="w-full text-left text-[11px] text-slate-700">
+            <thead class="bg-slate-50 text-slate-600 uppercase font-semibold border-b border-slate-200">
+              <tr>
+                <th class="p-2">Rank</th>
+                <th class="p-2">Kelurahan</th>
+                <th class="p-2">Elev</th>
+                <th class="p-2">KK Terpapar</th>
+              </tr>
+            </thead>
+            <tbody id="kelurahan-table-body" class="divide-y divide-slate-100">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Quick SOP Guideline Card -->
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 space-y-1.5 text-[11px] text-slate-600 shadow-sm">
+          <div class="font-bold text-slate-800 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <span>Matriks Tanggap Darurat Banjir & Rob:</span>
+          </div>
+          <div class="leading-relaxed">
+            Prioritas 1 ditujukan bagi Tegalsari & Muarareja melalui operasi polder pompa otomatis dan pengerukan sedimentasi rutin saluran sekunder.
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </aside>
+
+  <!-- ======================================================================
+       4. SLIDE-OVER TECHNICAL INSPECTOR MODAL (RIGHT SIDE DRAWER)
+       ====================================================================== -->
+  <aside id="inspector-drawer" class="fixed top-14 right-0 bottom-0 w-[440px] max-w-full bg-white/98 backdrop-blur-2xl border-l border-slate-200 z-50 shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+    <!-- Modal Header (Pure SVG Vector) -->
+    <div class="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <svg class="w-4 h-4 text-sky-600 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <h2 id="inspector-title" class="text-sm font-bold text-slate-900 truncate max-w-[300px]">Lembar Inspeksi Teknis</h2>
+      </div>
+      <button id="btn-close-inspector" class="w-7 h-7 rounded-lg bg-white hover:bg-slate-100 border border-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center cursor-pointer transition-colors shadow-sm" title="Tutup">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Modal Content Body -->
+    <div id="inspector-body" class="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar text-xs text-slate-700">
+      <!-- Injected dynamically via main.js -->
+    </div>
+  </aside>
+
+  <!-- ======================================================================
+       5. COMPACT FLOATING SIMULATION DOCK (Enterprise Light Theme)
+       ====================================================================== -->
+  <section id="panel-water-simulation" class="absolute bottom-5 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-2xl p-3.5 z-30 w-[500px] max-w-[calc(100%-24px)] shadow-xl flex flex-col gap-2 text-slate-900">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <svg class="w-4 h-4 text-sky-600 stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2M3 19c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2"/></svg>
+        <span class="text-xs font-bold text-slate-900">Simulasi Elevasi Pasang Rob 3D</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="btn-auto-play" class="text-xs font-bold px-3 py-1 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 transition-all cursor-pointer flex items-center gap-1.5 shadow-sm">
+          <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <span>Putar</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <input type="range" id="water-slider" class="flex-1 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-sky-600" min="0.0" max="2.5" step="0.1" value="0.0">
+      <span id="elevation-val" class="text-base font-black text-sky-600 min-w-[55px] text-right">0.0 m</span>
+    </div>
+  </section>
+
+  <!-- ES Module Application Bootstrap -->
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>

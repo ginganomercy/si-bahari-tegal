@@ -1,0 +1,184 @@
+/* ==========================================================================
+   Tegal 3D WebGIS — Light Mode Enterprise Styles & MapLibre Overrides
+   ========================================================================== */
+
+/* Light Mode Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* MapLibre Controls Positioning Adjustments (Light Theme) */
+.maplibregl-ctrl-top-right {
+  top: 66px !important;
+  right: 14px !important;
+}
+
+.maplibregl-ctrl-group {
+  background: rgba(255, 255, 255, 0.96) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08) !important;
+}
+
+.maplibregl-ctrl-group button {
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.maplibregl-ctrl-group button:hover {
+  background-color: #f8fafc !important;
+}
+
+/* MapLibre Popup Overrides for Light Theme */
+.maplibregl-popup-content {
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 14px !important;
+  color: #0f172a !important;
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12) !important;
+  padding: 14px !important;
+  max-width: 320px;
+}
+
+.maplibregl-popup-anchor-bottom .maplibregl-popup-tip {
+  border-top-color: rgba(255, 255, 255, 0.98) !important;
+}
+
+.maplibregl-popup-anchor-top .maplibregl-popup-tip {
+  border-bottom-color: rgba(255, 255, 255, 0.98) !important;
+}
+
+/* Off-canvas active state helper */
+.translate-x-0 {
+  transform: translateX(0) !important;
+}
+
+/* Telemetry Pulse Animation */
+@keyframes soft-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.95); }
+}
+
+.telemetry-pulse {
+  animation: soft-pulse 2s infinite ease-in-out;
+}
+
+/* GPU-Accelerated Landing Overlay Transitions */
+#landing-overlay {
+  will-change: opacity, transform;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s ease;
+}
+
+#landing-overlay.landing-hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+#landing-overlay.landing-hidden > div {
+  transform: scale(0.97) translateY(8px);
+}
+
+#landing-overlay > div {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Tutorial Spotlight Transitions (Native Game Engine) */
+#tutorial-root {
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s ease;
+}
+
+#tutorial-root.tutorial-hidden {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+#tutorial-cutout-rect {
+  transition: x 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              y 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#tutorial-highlight-ring {
+  transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              top 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#tutorial-popover-card {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.45), 0 0 0 1px rgba(0, 0, 0, 0.08) !important;
+  transition: left 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              top 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.25s ease-out;
+}
+
+#tutorial-popover-card h3 {
+  color: #0f172a !important;
+}
+
+#tutorial-popover-card p {
+  color: #334155 !important;
+}
+
+/* Caret Arrow Indicator pointing to Active Highlight Target */
+#tutorial-card-arrow {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background-color: #ffffff;
+  pointer-events: none;
+  z-index: 75;
+  transform: rotate(45deg);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#tutorial-card-arrow.arrow-top {
+  border-top: 1px solid #cbd5e1;
+  border-left: 1px solid #cbd5e1;
+}
+
+#tutorial-card-arrow.arrow-bottom {
+  border-bottom: 1px solid #cbd5e1;
+  border-right: 1px solid #cbd5e1;
+}
+
+#tutorial-card-arrow.arrow-left {
+  border-bottom: 1px solid #cbd5e1;
+  border-left: 1px solid #cbd5e1;
+}
+
+#tutorial-card-arrow.arrow-right {
+  border-top: 1px solid #cbd5e1;
+  border-right: 1px solid #cbd5e1;
+}
+
+/* Interactive Progress Dot Buttons */
+.tutorial-dot-btn {
+  border: none !important;
+  outline: none !important;
+  padding: 0 !important;
+  display: inline-block;
+  cursor: pointer;
+  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
+}
+.tutorial-dot-btn:focus-visible {
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.4);
+}

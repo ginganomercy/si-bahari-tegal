@@ -1,0 +1,27 @@
+{
+  "name": "si-bahari-3d",
+  "version": "1.0.0",
+  "description": "SI-BAHARI 3D: Sistem Informasi Banjir, Amblesan, Hidrologi & Analisis Rob Interaktif Kota Tegal",
+  "type": "module",
+  "scripts": {
+    "start": "python scripts/serve.py",
+    "data:seed": "python scripts/generate_spatial_seed.py",
+    "data:analyze": "python scripts/run_hybrid_analysis.py",
+    "data:verify": "python scripts/verify_integrity.py"
+  },
+  "keywords": [
+    "webgis",
+    "qgis",
+    "maplibre",
+    "threejs",
+    "tegal",
+    "flood-simulation",
+    "3d-terrain"
+  ],
+  "author": "Antigravity Spatial Engineering Team",
+  "license": "MIT",
+  "dependencies": {
+    "maplibre-gl": "^4.7.1",
+    "three": "^0.160.0"
+  }
+}
