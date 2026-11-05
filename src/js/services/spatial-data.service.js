@@ -63,3 +63,4 @@ export class SpatialDataService {
     this._cache.clear();
   }
 }
+

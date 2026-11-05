@@ -3,7 +3,13 @@
  * @description Manages 3D terrain elevation mesh, daytime atmosphere sky, and Clean Ultra HD basemaps (Zero Commercial POIs).
  */
 
+import maplibregl from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css';
 import { CAMERA_PRESETS, BASEMAP_CONFIG, WEBGL_CONFIG } from '../config/map.constants.js';
+
+if (typeof window !== 'undefined') {
+  window.maplibregl = maplibregl;
+}
 
 export class TerrainManager {
   /**

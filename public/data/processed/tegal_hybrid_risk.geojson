@@ -1,0 +1,635 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "KEL-TG-001",
+        "nama_kelurahan": "Tegalsari",
+        "ranking_kerentanan": 1,
+        "elevasi_rata_m": 0.8,
+        "luas_wilayah_ha": 185.4,
+        "jumlah_penduduk_jiwa": 18240,
+        "kepadatan_penduduk_jiwa_km2": 9840,
+        "kk_terdampak_estimasi": 1420,
+        "rw_terdampak_list": "RW 01, RW 02, RW 03, RW 04, RW 07",
+        "skor_kerusakan_drainase": 92.5,
+        "tipe_ancaman": "Rob Pasang Air Laut Pesisir & Luapan Muara",
+        "zona": "Pesisir / Hilir Kota Tegal",
+        "skor_ahp_risiko": 0.8025,
+        "klasifikasi_risiko": "TINGGI",
+        "rekomendasi_mitigasi": "Normalisasi drainase mendesak + Polder otomatis & pompa rob"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.143969,
+              -6.853
+            ],
+            [
+              109.140405,
+              -6.8483
+            ],
+            [
+              109.135,
+              -6.845884
+            ],
+            [
+              109.129293,
+              -6.848037
+            ],
+            [
+              109.125822,
+              -6.853
+            ],
+            [
+              109.128601,
+              -6.858564
+            ],
+            [
+              109.135,
+              -6.861273
+            ],
+            [
+              109.140499,
+              -6.857782
+            ],
+            [
+              109.143969,
+              -6.853
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "KEL-TG-002",
+        "nama_kelurahan": "Pesurungan Lor",
+        "ranking_kerentanan": 2,
+        "elevasi_rata_m": 1.2,
+        "luas_wilayah_ha": 142.0,
+        "jumlah_penduduk_jiwa": 11450,
+        "kepadatan_penduduk_jiwa_km2": 8060,
+        "kk_terdampak_estimasi": 980,
+        "rw_terdampak_list": "RW 01, RW 03, RW 05",
+        "skor_kerusakan_drainase": 88.0,
+        "tipe_ancaman": "Genangan Saluran Primer Mataram & Rob",
+        "zona": "Pesisir / Hilir Kota Tegal",
+        "skor_ahp_risiko": 0.7459,
+        "klasifikasi_risiko": "TINGGI",
+        "rekomendasi_mitigasi": "Normalisasi drainase mendesak + Polder otomatis & pompa rob"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.119706,
+              -6.862
+            ],
+            [
+              109.116907,
+              -6.857733
+            ],
+            [
+              109.112,
+              -6.855644
+            ],
+            [
+              109.106435,
+              -6.857161
+            ],
+            [
+              109.105067,
+              -6.862
+            ],
+            [
+              109.106859,
+              -6.86647
+            ],
+            [
+              109.112,
+              -6.869089
+            ],
+            [
+              109.117619,
+              -6.866886
+            ],
+            [
+              109.119706,
+              -6.862
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "KEL-TG-003",
+        "nama_kelurahan": "Pesurungan Kidul",
+        "ranking_kerentanan": 4,
+        "elevasi_rata_m": 1.5,
+        "luas_wilayah_ha": 128.5,
+        "jumlah_penduduk_jiwa": 10320,
+        "kepadatan_penduduk_jiwa_km2": 8030,
+        "kk_terdampak_estimasi": 760,
+        "rw_terdampak_list": "RW 02, RW 04",
+        "skor_kerusakan_drainase": 79.5,
+        "tipe_ancaman": "Sedimentasi Gorong-gorong Silang Rel Kereta",
+        "zona": "Pesisir / Hilir Kota Tegal",
+        "skor_ahp_risiko": 0.6754,
+        "klasifikasi_risiko": "SEDANG",
+        "rekomendasi_mitigasi": "Pembersihan sedimentasi rutin & sumur resapan"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.117667,
+              -6.872
+            ],
+            [
+              109.116179,
+              -6.867496
+            ],
+            [
+              109.111,
+              -6.865289
+            ],
+            [
+              109.106555,
+              -6.868135
+            ],
+            [
+              109.103289,
+              -6.872
+            ],
+            [
+              109.105683,
+              -6.876623
+            ],
+            [
+              109.111,
+              -6.877983
+            ],
+            [
+              109.115633,
+              -6.876028
+            ],
+            [
+              109.117667,
+              -6.872
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "KEL-TG-004",
+        "nama_kelurahan": "Sumurpanggang",
+        "ranking_kerentanan": 5,
+        "elevasi_rata_m": 1.8,
+        "luas_wilayah_ha": 164.2,
+        "jumlah_penduduk_jiwa": 14610,
+        "kepadatan_penduduk_jiwa_km2": 8890,
+        "kk_terdampak_estimasi": 890,
+        "rw_terdampak_list": "RW 01, RW 02, RW 06",
+        "skor_kerusakan_drainase": 75.0,
+        "tipe_ancaman": "Limpasan Kali Kemiri & Drainase Tersumbat",
+        "zona": "Pesisir / Hilir Kota Tegal",
+        "skor_ahp_risiko": 0.6605,
+        "klasifikasi_risiko": "SEDANG",
+        "rekomendasi_mitigasi": "Pembersihan sedimentasi rutin & sumur resapan"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.112268,
+              -6.877
+            ],
+            [
+              109.108645,
+              -6.872091
+            ],
+            [
+              109.103,
+              -6.870497
+            ],
+            [
+              109.097706,
+              -6.872397
+            ],
+            [
+              109.093959,
+              -6.877
+            ],
+            [
+              109.096964,
+              -6.882249
+            ],
+            [
+              109.103,
+              -6.884789
+            ],
+            [
+              109.10922,
+              -6.882409
+            ],
+            [
+              109.112268,
+              -6.877
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "KEL-TG-005",
+        "nama_kelurahan": "Krandon",
+        "ranking_kerentanan": 6,
+        "elevasi_rata_m": 1.4,
+        "luas_wilayah_ha": 155.0,
+        "jumlah_penduduk_jiwa": 10385,
+        "kepadatan_penduduk_jiwa_km2": 6700,
+        "kk_terdampak_estimasi": 620,
+        "rw_terdampak_list": "RW 01, RW 03",
+        "skor_kerusakan_drainase": 68.0,
+        "tipe_ancaman": "Genangan Sawah & Permukiman Dataran Rendah",
+        "zona": "Pesisir / Hilir Kota Tegal",
+        "skor_ahp_risiko": 0.6674,
+        "klasifikasi_risiko": "SEDANG",
+        "rekomendasi_mitigasi": "Pembersihan sedimentasi rutin & sumur resapan"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.10558,
+              -6.865
+            ],
+            [
+              109.103937,
+              -6.859837
+            ],
+            [
+              109.098,
+              -6.858665
+            ],
+            [
+              109.092619,
+              -6.860321
+            ],
+            [
+              109.089872,
+              -6.865
+            ],
+            [
+              109.092531,
+              -6.869755
+            ],
+            [
+              109.098,
+              -6.87212
+            ],
+            [
+              109.103414,
+              -6.869708
+            ],
+            [
+              109.10558,
+              -6.865
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "KEL-TG-006",
+        "nama_kelurahan": "Kaligangsa",
+        "ranking_kerentanan": 3,
+        "elevasi_rata_m": 1.1,
+        "luas_wilayah_ha": 210.8,
+        "jumlah_penduduk_jiwa": 13070,
+        "kepadatan_penduduk_jiwa_km2": 6200,
+        "kk_terdampak_estimasi": 1150,
+        "rw_terdampak_list": "RW 01, RW 02, RW 04, RW 05",
+        "skor_kerusakan_drainase": 85.0,
+        "tipe_ancaman": "Muara Sungai Kaligangsa & Pasang Laut Harian",
+        "zona": "Pesisir / Hilir Kota Tegal",
+        "skor_ahp_risiko": 0.7313,
+        "klasifikasi_risiko": "TINGGI",
+        "rekomendasi_mitigasi": "Normalisasi drainase mendesak + Polder otomatis & pompa rob"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.097959,
+              -6.868
+            ],
+            [
+              109.093944,
+              -6.862831
+            ],
+            [
+              109.088,
+              -6.860317
+            ],
+            [
+              109.08165,
+              -6.862478
+            ],
+            [
+              109.079513,
+              -6.868
+            ],
+            [
+              109.081744,
+              -6.87344
+            ],
+            [
+              109.088,
+              -6.875423
+            ],
+            [
+              109.094331,
+              -6.873505
+            ],
+            [
+              109.097959,
+              -6.868
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "KEL-TG-007",
+        "nama_kelurahan": "Debong Kidul",
+        "ranking_kerentanan": 7,
+        "elevasi_rata_m": 2.2,
+        "luas_wilayah_ha": 115.3,
+        "jumlah_penduduk_jiwa": 10610,
+        "kepadatan_penduduk_jiwa_km2": 9200,
+        "kk_terdampak_estimasi": 780,
+        "rw_terdampak_list": "RW 02, RW 03, RW 04",
+        "skor_kerusakan_drainase": 82.0,
+        "tipe_ancaman": "Sedimentasi Parah Saluran Sekunder Cik Ditiro",
+        "zona": "Pesisir / Hilir Kota Tegal",
+        "skor_ahp_risiko": 0.5634,
+        "klasifikasi_risiko": "SEDANG",
+        "rekomendasi_mitigasi": "Pembersihan sedimentasi rutin & sumur resapan"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.131408,
+              -6.892
+            ],
+            [
+              109.128897,
+              -6.887742
+            ],
+            [
+              109.124,
+              -6.88597
+            ],
+            [
+              109.119299,
+              -6.887912
+            ],
+            [
+              109.11725,
+              -6.892
+            ],
+            [
+              109.118383,
+              -6.896885
+            ],
+            [
+              109.124,
+              -6.89846
+            ],
+            [
+              109.129204,
+              -6.896526
+            ],
+            [
+              109.131408,
+              -6.892
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "KEL-TG-008",
+        "nama_kelurahan": "Tunon",
+        "ranking_kerentanan": 8,
+        "elevasi_rata_m": 2.0,
+        "luas_wilayah_ha": 122.0,
+        "jumlah_penduduk_jiwa": 10250,
+        "kepadatan_penduduk_jiwa_km2": 8400,
+        "kk_terdampak_estimasi": 640,
+        "rw_terdampak_list": "RW 01, RW 02",
+        "skor_kerusakan_drainase": 77.0,
+        "tipe_ancaman": "Penyempitan Saluran Tersier & Kurang Kemiringan",
+        "zona": "Pesisir / Hilir Kota Tegal",
+        "skor_ahp_risiko": 0.6372,
+        "klasifikasi_risiko": "SEDANG",
+        "rekomendasi_mitigasi": "Pembersihan sedimentasi rutin & sumur resapan"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.124898,
+              -6.886
+            ],
+            [
+              109.123615,
+              -6.881118
+            ],
+            [
+              109.118,
+              -6.880014
+            ],
+            [
+              109.112847,
+              -6.881519
+            ],
+            [
+              109.109573,
+              -6.886
+            ],
+            [
+              109.112503,
+              -6.89078
+            ],
+            [
+              109.118,
+              -6.892625
+            ],
+            [
+              109.123556,
+              -6.890831
+            ],
+            [
+              109.124898,
+              -6.886
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "KEL-TG-009",
+        "nama_kelurahan": "Kalinyamat Kulon",
+        "ranking_kerentanan": 9,
+        "elevasi_rata_m": 2.4,
+        "luas_wilayah_ha": 130.5,
+        "jumlah_penduduk_jiwa": 10180,
+        "kepadatan_penduduk_jiwa_km2": 7800,
+        "kk_terdampak_estimasi": 520,
+        "rw_terdampak_list": "RW 03, RW 04",
+        "skor_kerusakan_drainase": 64.0,
+        "tipe_ancaman": "Antrean Aliran Drainase Lambat & Air Kiriman",
+        "zona": "Pesisir / Hilir Kota Tegal",
+        "skor_ahp_risiko": 0.5287,
+        "klasifikasi_risiko": "SEDANG",
+        "rekomendasi_mitigasi": "Pembersihan sedimentasi rutin & sumur resapan"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.120777,
+              -6.895
+            ],
+            [
+              109.118415,
+              -6.890292
+            ],
+            [
+              109.113,
+              -6.889189
+            ],
+            [
+              109.108523,
+              -6.891107
+            ],
+            [
+              109.106163,
+              -6.895
+            ],
+            [
+              109.108226,
+              -6.899151
+            ],
+            [
+              109.113,
+              -6.900783
+            ],
+            [
+              109.118625,
+              -6.899891
+            ],
+            [
+              109.120777,
+              -6.895
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "KEL-TG-010",
+        "nama_kelurahan": "Kalinyamat Wetan",
+        "ranking_kerentanan": 10,
+        "elevasi_rata_m": 2.6,
+        "luas_wilayah_ha": 138.0,
+        "jumlah_penduduk_jiwa": 11316,
+        "kepadatan_penduduk_jiwa_km2": 8200,
+        "kk_terdampak_estimasi": 480,
+        "rw_terdampak_list": "RW 02, RW 05",
+        "skor_kerusakan_drainase": 59.0,
+        "tipe_ancaman": "Air Kiriman Saluran Penghubung Saluran Sekunder",
+        "zona": "Pesisir / Hilir Kota Tegal",
+        "skor_ahp_risiko": 0.5166,
+        "klasifikasi_risiko": "SEDANG",
+        "rekomendasi_mitigasi": "Pembersihan sedimentasi rutin & sumur resapan"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.129216,
+              -6.898
+            ],
+            [
+              109.126067,
+              -6.893594
+            ],
+            [
+              109.121,
+              -6.891215
+            ],
+            [
+              109.115826,
+              -6.893501
+            ],
+            [
+              109.112713,
+              -6.898
+            ],
+            [
+              109.115742,
+              -6.902572
+            ],
+            [
+              109.121,
+              -6.90415
+            ],
+            [
+              109.125977,
+              -6.902328
+            ],
+            [
+              109.129216,
+              -6.898
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -113,3 +113,4 @@ export class InspectorComponent {
     return Boolean(this.drawer && this.drawer.classList.contains('translate-x-0'));
   }
 }
+

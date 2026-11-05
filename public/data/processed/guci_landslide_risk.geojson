@@ -1,0 +1,212 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HULU-GC-001",
+        "nama_desa": "Desa Guci (Pusat Wisata & Pemandian)",
+        "elevasi_rata_m": 1050.0,
+        "kemiringan_lereng_derajat": 38.5,
+        "luas_wilayah_ha": 340.5,
+        "tingkat_alih_fungsi_lahan_pct": 34.0,
+        "curah_hujan_ekstrem_mm_hari": 185.0,
+        "keterangan_bencana": "Titik Banjir Bandang & Longsor Des 2025 akibat curah hujan 185 mm/hari & alih fungsi lereng hutan",
+        "prioritas_mitigasi": "Sabo Dam 3 Unit + Reboisasi Tanaman Berakar Dalam (Vetiver/Aren)",
+        "zona": "Kawasan Hulu Lereng Gunung Slamet",
+        "skor_ahp_risiko": 0.8092,
+        "klasifikasi_risiko": "TINGGI",
+        "rekomendasi_mitigasi": "Moratorium alih fungsi lereng + Reboisasi akar dalam (Vetiver/Aren)"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.181081,
+              -7.192
+            ],
+            [
+              109.177558,
+              -7.18533
+            ],
+            [
+              109.171376,
+              -7.180289
+            ],
+            [
+              109.16229,
+              -7.179395
+            ],
+            [
+              109.156061,
+              -7.185089
+            ],
+            [
+              109.154099,
+              -7.192
+            ],
+            [
+              109.154391,
+              -7.199966
+            ],
+            [
+              109.162704,
+              -7.203497
+            ],
+            [
+              109.17085,
+              -7.202303
+            ],
+            [
+              109.176956,
+              -7.19829
+            ],
+            [
+              109.181081,
+              -7.192
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HULU-GC-002",
+        "nama_desa": "Desa Rembul",
+        "elevasi_rata_m": 920.0,
+        "kemiringan_lereng_derajat": 28.0,
+        "luas_wilayah_ha": 285.0,
+        "tingkat_alih_fungsi_lahan_pct": 28.0,
+        "curah_hujan_ekstrem_mm_hari": 165.0,
+        "keterangan_bencana": "Zona limpasan air hujan menuju alur Sungai Gung dengan potensi debris flow tinggi",
+        "prioritas_mitigasi": "Pembuatan Terasering Berundak & Saluran Pengelak Lahar Dingin",
+        "zona": "Kawasan Hulu Lereng Gunung Slamet",
+        "skor_ahp_risiko": 0.6727,
+        "klasifikasi_risiko": "SEDANG",
+        "rekomendasi_mitigasi": "Terasering berundak & Sabo Dam penahan limpasan"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.166479,
+              -7.185
+            ],
+            [
+              109.165611,
+              -7.178296
+            ],
+            [
+              109.159214,
+              -7.173722
+            ],
+            [
+              109.151147,
+              -7.17469
+            ],
+            [
+              109.145831,
+              -7.179208
+            ],
+            [
+              109.142661,
+              -7.185
+            ],
+            [
+              109.143445,
+              -7.1923
+            ],
+            [
+              109.151043,
+              -7.19559
+            ],
+            [
+              109.159389,
+              -7.196746
+            ],
+            [
+              109.166208,
+              -7.192081
+            ],
+            [
+              109.166479,
+              -7.185
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "HULU-GC-003",
+        "nama_desa": "Desa Tuwel",
+        "elevasi_rata_m": 780.0,
+        "kemiringan_lereng_derajat": 22.0,
+        "luas_wilayah_ha": 310.2,
+        "tingkat_alih_fungsi_lahan_pct": 22.0,
+        "curah_hujan_ekstrem_mm_hari": 150.0,
+        "keterangan_bencana": "Jalur transmisi debit puncak dari lereng atas menuju bantaran Sungai Gung Kabupaten",
+        "prioritas_mitigasi": "Penguatan Tebing Sungai (Bronjong Kawat) & Early Warning System Banjir",
+        "zona": "Kawasan Hulu Lereng Gunung Slamet",
+        "skor_ahp_risiko": 0.5569,
+        "klasifikasi_risiko": "SEDANG",
+        "rekomendasi_mitigasi": "Terasering berundak & Sabo Dam penahan limpasan"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.161199,
+              -7.17
+            ],
+            [
+              109.160823,
+              -7.161899
+            ],
+            [
+              109.152853,
+              -7.157013
+            ],
+            [
+              109.143314,
+              -7.15746
+            ],
+            [
+              109.13655,
+              -7.162766
+            ],
+            [
+              109.132448,
+              -7.17
+            ],
+            [
+              109.137019,
+              -7.176937
+            ],
+            [
+              109.143432,
+              -7.182224
+            ],
+            [
+              109.152589,
+              -7.182283
+            ],
+            [
+              109.161527,
+              -7.178546
+            ],
+            [
+              109.161199,
+              -7.17
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

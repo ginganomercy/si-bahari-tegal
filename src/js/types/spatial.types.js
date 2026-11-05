@@ -102,3 +102,4 @@
  */
 
 export const SPATIAL_TYPES_VERSION = '1.0.0';
+

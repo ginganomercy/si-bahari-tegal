@@ -16,8 +16,10 @@ from typing import Dict, Any, List
 RAW_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "raw")
 PROCESSED_DIR = os.path.join(os.path.dirname(__file__), "..", "data", "processed")
 SRC_DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "src", "data", "processed")
+PUBLIC_DATA_DIR = os.path.join(os.path.dirname(__file__), "..", "public", "data", "processed")
 os.makedirs(PROCESSED_DIR, exist_ok=True)
 os.makedirs(SRC_DATA_DIR, exist_ok=True)
+os.makedirs(PUBLIC_DATA_DIR, exist_ok=True)
 
 # --------------------------------------------------------------------------
 # AHP WEIGHT CONSTANTS (Must sum to 1.00)
@@ -176,13 +178,15 @@ def main():
     process_drainage_points()
     sync_causal_layers()
     
-    # Mirror all processed layers to src/data/processed
+    # Mirror all processed layers to src/data/processed and public/data/processed
     for item in os.listdir(PROCESSED_DIR):
         src_file = os.path.join(PROCESSED_DIR, item)
-        dst_file = os.path.join(SRC_DATA_DIR, item)
+        dst_src = os.path.join(SRC_DATA_DIR, item)
+        dst_pub = os.path.join(PUBLIC_DATA_DIR, item)
         if os.path.isfile(src_file):
-            shutil.copyfile(src_file, dst_file)
-    print(f" -> Mirrored all causal layers to {SRC_DATA_DIR}")
+            shutil.copyfile(src_file, dst_src)
+            shutil.copyfile(src_file, dst_pub)
+    print(f" -> Mirrored all causal layers to {SRC_DATA_DIR} and {PUBLIC_DATA_DIR}")
     
     print("Causal multi-hazard analysis complete. All layers web-ready.")
 

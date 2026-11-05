@@ -1,0 +1,52 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "SAL-TG-01",
+        "nama_zona": "Sabuk Intrusi Air Laut Pesisir Tegal (Buffer 1.5 km)",
+        "salinitas_air_tanah_ppt": 3.8,
+        "daya_hantar_listrik_us_cm": 4200,
+        "status_air_sumur": "Payau / Tidak Layak Minum Langsung",
+        "dampak_warga": "Ketergantungan tinggi pada suplai air tangki PDAM & korosi pipa logam",
+        "rekomendasi": "Penyediaan instalasi desalinasi bertenaga surya & perluasan pipa PDAM"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              109.06,
+              -6.825
+            ],
+            [
+              109.175,
+              -6.835
+            ],
+            [
+              109.175,
+              -6.865
+            ],
+            [
+              109.14,
+              -6.868
+            ],
+            [
+              109.105,
+              -6.862
+            ],
+            [
+              109.06,
+              -6.855
+            ],
+            [
+              109.06,
+              -6.825
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

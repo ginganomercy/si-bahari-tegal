@@ -1,15 +1,16 @@
 # 🌊 SI-BAHARI 3D — Digital Twin Kota Tegal
 ### *Sistem Simulasi Banjir Rob, Amblesan Tanah & Hidrologi Pesisir*
 
-[![MapLibre GL JS](https://img.shields.io/badge/MapLibre_GL_JS-v4.7.1_(Pinned)-0284c7.svg?style=flat-square&logo=maplibre)](https://maplibre.org/)
+[![MapLibre GL JS](https://img.shields.io/badge/MapLibre_GL_JS-v4.7.1_(Bundled)-0284c7.svg?style=flat-square&logo=maplibre)](https://maplibre.org/)
+[![Vite](https://img.shields.io/badge/Bundler-Vite_v8-646cff.svg?style=flat-square&logo=vite)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind_CSS_v4_AOT-38bdf8.svg?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
 [![WebGL2](https://img.shields.io/badge/Render_Engine-WebGL2_60FPS-0ea5e9.svg?style=flat-square)](https://khronos.org/webgl/)
 [![Python](https://img.shields.io/badge/Geoprocessing-Python_3.10%2B_%2F_3.11%2B-38bdf8.svg?style=flat-square&logo=python)](https://python.org/)
-[![QGIS](https://img.shields.io/badge/GIS_Standard-OGC_GeoJSON_(EPSG%3A4326)-58a6ff.svg?style=flat-square&logo=qgis)](https://qgis.org/)
-[![Architecture](https://img.shields.io/badge/Architecture-Bare--Metal_Native_ESM-10b981.svg?style=flat-square)]()
+[![Cloudflare Pages](https://img.shields.io/badge/Deploy-Cloudflare_Pages-f38020.svg?style=flat-square&logo=cloudflare)](https://pages.cloudflare.com/)
 [![Status](https://img.shields.io/badge/Integrity-100%25_PASS-emerald.svg?style=flat-square)]()
 [![License](https://img.shields.io/badge/License-MIT-slate.svg?style=flat-square)]()
 
-Aplikasi WebGIS 3D tingkat produksi (*Digital Twin Enterprise*) untuk pemodelan bencana hidrometeorologi terpadu dan faktor kausal pemicu di wilayah **Kota Tegal (Kawasan Pesisir 0–3 mdpl & Hulu Lereng Guci Gunung Slamet)**. Dibangun dengan antarmuka **Light Mode Enterprise** (*Apple Maps & ArcGIS standard*) dan arsitektur modular berkinerja tinggi (*Bare-Metal Native ESM*) dengan waktu muat ultra-cepat (<30 ms) dan kestabilan 60 FPS pada peramban.
+Aplikasi WebGIS 3D tingkat produksi (*Digital Twin Enterprise*) untuk pemodelan bencana hidrometeorologi terpadu dan faktor kausal pemicu di wilayah **Kota Tegal (Kawasan Pesisir 0–3 mdpl & Hulu Lereng Guci Gunung Slamet)**. Dibangun dengan antarmuka **Light Mode Enterprise** (*Apple Maps & ArcGIS standard*) dan pipeline modern berkinerja tinggi (**Vite 8 + Tailwind CSS v4 AOT Compiler + Bundled MapLibre GL JS**) dengan waktu muat awal ultra-cepat (<300 ms), ukuran muatan awal ~35 KB gzip, dan kestabilan 60 FPS pada peramban.
 
 ---
 
@@ -134,10 +135,12 @@ $$\text{Risk Score} = (W_E \cdot S_E) + (W_S \cdot S_S) + (W_D \cdot S_D) + (W_L
 
 ## 💻 Spesifikasi Arsitektur & Teknologi
 
-* **Frontend Engine:** Bare-Metal Native ESM (*ECMAScript Modules*) tanpa compiler/bundler overhead (tanpa Webpack/Vite), menghasilkan *time-to-interactive* $<30\text{ ms}$.
-* **Map & 3D WebGL Engine:** **MapLibre GL JS v4.7.1 (Pinned Stable)** dengan shader elevasi air laut GPU bathymetric dan ekstrusi tapak bangunan 3D.
-* **Desain UI/UX:** Tailwind CSS dengan standar **Light Mode Enterprise** (Apple Maps / ArcGIS Experience Builder), bebas emoji informal, 100% vektor SVG murni.
-* **Backend Dev Server:** Dedicated multithreaded Python server (`scripts/serve.py`) dengan header anti-caching dan penanganan soket IPv4 Windows.
+* **Frontend Build Engine:** **Vite v8** dengan Hot Module Replacement (HMR) instan dan kompilasi Ahead-Of-Time (AOT).
+* **Styling Engine:** **Tailwind CSS v4** terintegrasi via `@tailwindcss/vite` — tanpa kompilator runtime JIT di browser, menghasilkan stylesheet bersih terkompresi ~8.1 KB gzip.
+* **Map & 3D WebGL Engine:** **MapLibre GL JS v4.7.1 (Bundled Vendor Chunk)** dengan isolasi chunk terpisah (~209 KB gzip), shader elevasi genangan air GPU bathymetric, dan ekstrusi tapak bangunan 3D.
+* **Modularity:** Arsitektur Native ES Modules dengan isolasi layer: `config/`, `types/`, `services/`, `components/`, `layers/`, `controllers/`.
+* **Desain UI/UX:** Standar **Light Mode Enterprise** (Apple Maps / ArcGIS Experience Builder), bebas emoji informal, 100% vektor SVG murni.
+* **Backend Dev Server:** Dedicated multithreaded Python server (`scripts/serve.py`) dengan header anti-caching dan penanganan soket IPv4 Windows, serta server Vite bawaan (`npm run dev`).
 * **Format Data:** Standar OGC GeoJSON (WGS84 EPSG:4326), kompatibel 100% dengan **QGIS Desktop LTR 3.34+**.
 
 ---
@@ -163,29 +166,36 @@ qgis-map/
 │       ├── guci_landslide_risk.geojson
 │       ├── drainage_critical_points.geojson
 │       └── buildings_footprints_tegal.geojson
+├── public/                                   # Aset publik statis untuk bundler & CDN
+│   ├── _headers                              # Konfigurasi caching, CORS, & MIME Cloudflare Pages
+│   └── data/processed/                       # GeoJSON statis yang disajikan langsung ke klien
 ├── scripts/
 │   ├── serve.py                              # Daemon HTTP server multithreaded (127.0.0.1:8000)
 │   ├── generate_spatial_seed.py              # Generator seluruh lapisan spasial & kausalitas
 │   ├── run_hybrid_analysis.py                # Engine skoring AHP & kalkulasi risiko gabungan
+│   ├── test_domain_calculations.py           # Unit tests kalkulasi AHP & logistik pembersihan
 │   └── verify_integrity.py                   # Automated test suite integritas berkas (100% PASS)
 ├── src/
 │   ├── index.html                            # Dashboard WebGIS Light Mode Enterprise
+│   ├── _headers                              # Headers konfigurasi fallback
 │   ├── css/
-│   │   └── style.css                         # Overrides kustom popover, caret & MapLibre
-│   ├── data/processed/                       # Mirror dataset lokal web
+│   │   └── style.css                         # Tailwind v4 import, theme colors & custom overrides
+│   ├── data/processed/                       # Salinan data spasial lokal modul
 │   └── js/
 │       ├── config/
 │       │   └── map.constants.js              # Named constants, design tokens & koordinat
+│       ├── types/
+│       │   └── spatial.types.js              # Typed JSDoc schemas & interfaces
 │       ├── services/
-│       │   └── storage.service.js            # Persistensi preferensi localStorage
+│       │   ├── storage.service.js            # Persistensi preferensi localStorage
+│       │   └── spatial-data.service.js       # Centralized Spatial Data Repository & cache
 │       ├── components/
-│       │   ├── landing/
-│       │   │   ├── landing.template.js       # Template DOM Portal Onboarding Eksekutif
-│       │   │   └── landing.component.js      # Controller Onboarding & Quick Scenario
-│       │   └── tutorial/
-│       │       ├── tutorial.steps.js         # Konfigurasi 5 langkah walkthrough tour
-│       │       ├── tutorial.template.js      # Template SVG spotlight mask & dialog card
-│       │       └── tutorial.component.js     # Controller game engine, locks & dynamic caret
+│       │   ├── landing/                      # Portal Onboarding Eksekutif & Quick Scenario
+│       │   ├── tutorial/                     # Walkthrough tour, dialog masks, game engine
+│       │   ├── inspector/                    # Inspection drawer untuk kelurahan & stasiun pompa
+│       │   ├── drainage/                     # List saluran drainase & kalkulator biaya
+│       │   ├── analytics/                    # Tabel skoring AHP kelurahan terpadu
+│       │   └── ui/                           # Toast notification system
 │       ├── layers/
 │       │   ├── terrain.layer.js              # Basemap satelit bersih (Zero POI) & 3D Terrain
 │       │   ├── buildings.layer.js            # Ekstrusi bangunan 3D & deteksi terendam
@@ -195,8 +205,10 @@ qgis-map/
 │       │   ├── camera.controller.js          # Transisi kamera sinematik (Tegal <-> Guci)
 │       │   └── simulation.controller.js      # Simulator pasang rob, polder & skenario cepat
 │       └── main.js                           # Master coordinator aplikasi
+├── dist/                                     # Hasil kompilasi AOT produksi siap deploy
+├── vite.config.js                            # Konfigurasi bundler Vite v8 & Tailwind AOT
 ├── tegal_flood_project.qgs                   # File project workspace QGIS Desktop
-├── package.json                              # Metadata & skrip otomasi NPM
+├── package.json                              # Metadata & skrip otomasi NPM / Bun
 └── README.md                                 # Dokumentasi teknis komprehensif
 ```
 
@@ -205,22 +217,61 @@ qgis-map/
 ## 🚀 Panduan Instalasi & Menjalankan Server
 
 ### 1. Prasyarat Sistem
-* **Python:** Versi `3.10+` atau `3.11+` (disarankan).
-* **Peramban Web:** Google Chrome, Microsoft Edge, Mozilla Firefox, atau Safari versi terbaru dengan dukungan WebGL2 aktif.
+* **Node.js:** Versi `18.0+` (disarankan LTS 20+) atau **Bun** `1.0+`.
+* **Python:** Versi `3.10+` atau `3.11+` (untuk geoprocessing & unit tests).
+* **Peramban Web:** Google Chrome, Microsoft Edge, Mozilla Firefox, atau Safari versi terbaru dengan WebGL2 aktif.
 
-### 2. Menjalankan Server Lokal
-Karena aplikasi menggunakan modul ES6 modern dan memuat berkas GeoJSON secara asinkron, aplikasi harus dijalankan melalui protokol HTTP:
+### 2. Menjalankan Server Pengembangan Lokal
 
 ```bash
-# Opsi 1: Menggunakan server berkinerja tinggi bawaan proyek (Rekomendasi)
+# 1. Instalasi dependensi
+npm install
+
+# 2. Jalankan Vite Development Server (Instan HMR pada http://localhost:8000)
+npm run dev
+
+# Opsi alternatif: Menjalankan Python server
 python scripts/serve.py
-
-# Opsi 2: Menggunakan NPM
-npm start
-
-# Opsi 3: Menggunakan modul HTTP bawaan Python
-python -m http.server 8000
 ```
+
+### 3. Membangun Berkas Produksi (Production Build)
+
+```bash
+# Kompilasi AOT dengan Vite & Tailwind v4
+npm run build
+
+# Uji coba build produksi secara lokal
+npm run preview
+```
+
+---
+
+## ☁️ Panduan Deploy ke Cloudflare Pages
+
+Aplikasi ini telah dioptimalkan khusus untuk arsitektur edge **Cloudflare Pages**:
+
+### Langkah 1: Hubungkan Repositori GitHub
+1. Buka dashboard [Cloudflare Dashboard](https://dash.cloudflare.com/) > **Workers & Pages**.
+2. Pilih **Create Application** > tab **Pages** > **Connect to Git**.
+3. Pilih repositori `ginganomercy/si-bahari-tegal`.
+
+### Langkah 2: Konfigurasi Build Settings
+Isi pengaturan build sebagai berikut:
+
+| Pengaturan | Nilai Konfigurasi |
+|---|---|
+| **Project name** | `si-bahari-tegal` (atau sesuai keinginan) |
+| **Production branch** | `main` |
+| **Framework preset** | `Vite` (atau `None`) |
+| **Build command** | `npm run build` |
+| **Build output directory** | `dist` |
+| **Node.js version** | `20` (Environment variable `NODE_VERSION: 20`) |
+
+### Langkah 3: Optimasi Caching & CORS Otomatis
+File `public/_headers` akan disalin secara otomatis ke direktori `dist/_headers` saat build:
+* Mengatur MIME type `application/json` pada dataset GeoJSON.
+* Mengaktifkan edge caching `Cache-Control: public, max-age=86400, stale-while-revalidate=3600`.
+* Mengaktifkan header CORS `Access-Control-Allow-Origin: *`.
 
 Setelah server aktif, buka peramban Anda pada alamat:  
 👉 **`http://localhost:8000/src/`**
