@@ -117,6 +117,7 @@ html, body {
 /* Off-canvas active state helper */
 .translate-x-0 {
   transform: translateX(0) !important;
+  translate: 0 0 !important;
 }
 
 /* Telemetry Pulse Animation */

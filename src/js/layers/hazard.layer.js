@@ -151,6 +151,8 @@ export class HazardLayer {
           this.onFeatureInspectCallback('KELURAHAN', props);
         }
       });
+      this.map.on('mouseenter', 'urban-risk-fill', () => { this.map.getCanvas().style.cursor = 'pointer'; });
+      this.map.on('mouseleave', 'urban-risk-fill', () => { this.map.getCanvas().style.cursor = ''; });
 
     } catch (err) {
       console.error('[HazardLayer] Error loading urban risk layer:', err);
@@ -240,6 +242,8 @@ export class HazardLayer {
           this.onFeatureInspectCallback('GUCI', props);
         }
       });
+      this.map.on('mouseenter', 'guci-risk-fill', () => { this.map.getCanvas().style.cursor = 'pointer'; });
+      this.map.on('mouseleave', 'guci-risk-fill', () => { this.map.getCanvas().style.cursor = ''; });
 
     } catch (err) {
       console.error('[HazardLayer] Error loading Guci risk layer:', err);
@@ -291,13 +295,17 @@ export class HazardLayer {
         }
       });
 
-      this.map.on('click', 'drainage-points-core', (e) => {
+      const handleDrainageClick = (e) => {
         if (!e.features || e.features.length === 0) return;
         const props = e.features[0].properties;
         if (this.onFeatureInspectCallback) {
           this.onFeatureInspectCallback('DRAINAGE', props);
         }
-      });
+      };
+      this.map.on('click', 'drainage-points-core', handleDrainageClick);
+      this.map.on('click', 'drainage-points-glow', handleDrainageClick);
+      this.map.on('mouseenter', 'drainage-points-core', () => { this.map.getCanvas().style.cursor = 'pointer'; });
+      this.map.on('mouseleave', 'drainage-points-core', () => { this.map.getCanvas().style.cursor = ''; });
 
     } catch (err) {
       console.error('[HazardLayer] Error loading drainage points:', err);
@@ -511,13 +519,17 @@ export class HazardLayer {
         }
       });
 
-      this.map.on('click', 'waste-points-core', (e) => {
+      const handleWasteClick = (e) => {
         if (!e.features || e.features.length === 0) return;
         const props = e.features[0].properties;
         if (this.onFeatureInspectCallback) {
           this.onFeatureInspectCallback('WASTE', props);
         }
-      });
+      };
+      this.map.on('click', 'waste-points-core', handleWasteClick);
+      this.map.on('click', 'waste-points-glow', handleWasteClick);
+      this.map.on('mouseenter', 'waste-points-core', () => { this.map.getCanvas().style.cursor = 'pointer'; });
+      this.map.on('mouseleave', 'waste-points-core', () => { this.map.getCanvas().style.cursor = ''; });
 
     } catch (err) {
       console.error('[HazardLayer] Error loading waste chokes layer:', err);

@@ -93,7 +93,18 @@ export class InspectorComponent {
         return;
     }
 
+    // Ensure left app-drawer closes on smaller screens so inspector has clear view
+    const appDrawer = document.getElementById('app-drawer');
+    const drawerBackdrop = document.getElementById('drawer-backdrop');
+    if (appDrawer && window.innerWidth < 1200) {
+      appDrawer.classList.add('-translate-x-full');
+      if (drawerBackdrop) drawerBackdrop.classList.add('hidden');
+    }
+
+    // Force remove translate-x-full and apply translate-x-0 with native CSS support
+    this.drawer.classList.remove('translate-x-full');
     this.drawer.classList.add('translate-x-0');
+    if (this.body) this.body.scrollTop = 0;
   }
 
   /**
@@ -102,6 +113,7 @@ export class InspectorComponent {
   close() {
     if (this.drawer) {
       this.drawer.classList.remove('translate-x-0');
+      this.drawer.classList.add('translate-x-full');
     }
   }
 
@@ -110,7 +122,7 @@ export class InspectorComponent {
    * @returns {boolean}
    */
   isOpen() {
-    return Boolean(this.drawer && this.drawer.classList.contains('translate-x-0'));
+    return Boolean(this.drawer && !this.drawer.classList.contains('translate-x-full'));
   }
 }
 
