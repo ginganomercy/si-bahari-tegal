@@ -237,3 +237,39 @@ html, body {
 .tutorial-dot-btn:focus-visible {
   box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.4);
 }
+
+/* ==========================================================================
+   Mobile Ergonomics & Floating Dock Responsive Micro-Interactions
+   ========================================================================== */
+
+/* Utility to eliminate native scrollbar while preserving touch scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Smooth expansion and collapse transition for Water Dock */
+#panel-water-simulation {
+  transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              padding 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s ease;
+}
+
+#dock-expanded-view, #dock-minimized-view {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

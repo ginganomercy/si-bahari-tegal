@@ -195,7 +195,7 @@ function _setupHeaderControls(map, cameraController, landingComponent, tutorialC
   const btnGuci = document.getElementById('btn-zone-guci');
   const btnTegalMobile = document.getElementById('btn-zone-tegal-mobile');
   const btnGuciMobile = document.getElementById('btn-zone-guci-mobile');
-  const simDock = document.getElementById('panel-water-simulation') || document.querySelector('section.absolute.bottom-5');
+  const simDockWrapper = document.getElementById('simulation-dock-wrapper') || document.getElementById('panel-water-simulation') || document.querySelector('section.absolute.bottom-5');
   const panelCoastal = document.getElementById('panel-coastal-analytics');
   const panelGuci = document.getElementById('panel-guci-analytics');
 
@@ -213,9 +213,17 @@ function _setupHeaderControls(map, cameraController, landingComponent, tutorialC
         btnGuciMobile.className = 'flex-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all cursor-pointer flex items-center justify-center gap-1.5 whitespace-nowrap';
       }
       cameraController.flyToZone('KOTA_TEGAL');
-      if (simDock) simDock.style.display = 'flex';
-      if (panelCoastal) panelCoastal.classList.remove('hidden');
-      if (panelGuci) panelGuci.classList.add('hidden');
+      if (simDockWrapper) simDockWrapper.style.display = 'flex';
+      if (panelCoastal) {
+        panelCoastal.classList.remove('hidden');
+        panelCoastal.style.display = 'block';
+      }
+      if (panelGuci) {
+        panelGuci.classList.add('hidden');
+        panelGuci.style.display = 'none';
+      }
+      const chipZoneLabel = document.getElementById('chip-zone-label');
+      if (chipZoneLabel) chipZoneLabel.textContent = '🏔️ Guci 3D';
     } else {
       if (btnGuci) btnGuci.className = activeZoneClass;
       if (btnTegal) btnTegal.className = inactiveZoneClass;
@@ -226,9 +234,17 @@ function _setupHeaderControls(map, cameraController, landingComponent, tutorialC
         btnTegalMobile.className = 'flex-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all cursor-pointer flex items-center justify-center gap-1.5 whitespace-nowrap';
       }
       cameraController.flyToZone('GUCI_BUMIJAWA');
-      if (simDock) simDock.style.display = 'none';
-      if (panelCoastal) panelCoastal.classList.add('hidden');
-      if (panelGuci) panelGuci.classList.remove('hidden');
+      if (simDockWrapper) simDockWrapper.style.display = 'none';
+      if (panelCoastal) {
+        panelCoastal.classList.add('hidden');
+        panelCoastal.style.display = 'none';
+      }
+      if (panelGuci) {
+        panelGuci.classList.remove('hidden');
+        panelGuci.style.display = 'block';
+      }
+      const chipZoneLabel = document.getElementById('chip-zone-label');
+      if (chipZoneLabel) chipZoneLabel.textContent = '📍 Pesisir';
     }
 
     if (window.innerWidth < 768) {
@@ -240,6 +256,46 @@ function _setupHeaderControls(map, cameraController, landingComponent, tutorialC
   if (btnGuci) btnGuci.addEventListener('click', () => selectZone('GUCI'));
   if (btnTegalMobile) btnTegalMobile.addEventListener('click', () => selectZone('TEGAL'));
   if (btnGuciMobile) btnGuciMobile.addEventListener('click', () => selectZone('GUCI'));
+
+  // Mobile Quick Action Scenario Chips Wiring
+  const quickChips = document.querySelectorAll('.btn-quick-chip');
+  quickChips.forEach(chip => {
+    chip.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const scenarioKey = chip.getAttribute('data-chip-scenario');
+      const action = chip.getAttribute('data-chip-action');
+
+      if (simulationControllerInstance) {
+        simulationControllerInstance.triggerHaptic(15);
+      }
+
+      if (scenarioKey === 'RESET') {
+        if (simulationControllerInstance) {
+          simulationControllerInstance.setPumpStatus(true);
+          if (simulationControllerInstance.slider) simulationControllerInstance.slider.value = '0.0';
+          simulationControllerInstance.requestElevationUpdate(0.0);
+        }
+      } else if (scenarioKey) {
+        if (simulationControllerInstance) {
+          simulationControllerInstance.applyScenario(scenarioKey);
+        }
+      } else if (action === 'TOGGLE_PUMP') {
+        if (simulationControllerInstance) {
+          simulationControllerInstance.setPumpStatus(!simulationControllerInstance.isPumpActive);
+        }
+      }
+    });
+  });
+
+  // Mobile Quick Zone Toggle Chip
+  const btnChipZoneToggle = document.getElementById('btn-chip-zone-toggle');
+  if (btnChipZoneToggle) {
+    btnChipZoneToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isCurrentlyGuci = cameraController.getActiveZone() === 'GUCI_BUMIJAWA';
+      selectZone(isCurrentlyGuci ? 'TEGAL' : 'GUCI');
+    });
+  }
 
   const selectBasemap = document.getElementById('select-basemap');
   if (selectBasemap) {

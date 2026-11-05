@@ -30,6 +30,16 @@ export class SimulationController {
     this.alertBadge = document.getElementById('alert-status-badge');
     this.btnAutoPlay = document.getElementById('btn-auto-play');
 
+    // Minimizable Dock DOM References
+    this.dockExpandedView = document.getElementById('dock-expanded-view');
+    this.dockMinimizedView = document.getElementById('dock-minimized-view');
+    this.btnToggleMinimize = document.getElementById('btn-toggle-dock-minimize');
+    this.btnToggleExpand = document.getElementById('btn-toggle-dock-expand');
+    this.dockMinimizedClickArea = document.getElementById('dock-minimized-click-area');
+    this.minimizedElevationDisplay = document.getElementById('minimized-elevation-val');
+    this.btnMinimizedPlay = document.getElementById('btn-minimized-play');
+    this.isDockMinimized = false;
+
     // Polder Pump & Scenario DOM references
     this.togglePump = document.getElementById('toggle-polder-pump');
     this.pumpStatusBadge = document.getElementById('pump-status-badge');
@@ -63,10 +73,38 @@ export class SimulationController {
       this.requestElevationUpdate(targetMeters);
     });
 
-    // Auto-play button
+    // Auto-play button (Expanded view)
     if (this.btnAutoPlay) {
       this.btnAutoPlay.addEventListener('click', () => {
         this.toggleAutoPlay();
+      });
+    }
+
+    // Auto-play button (Minimized pill view)
+    if (this.btnMinimizedPlay) {
+      this.btnMinimizedPlay.addEventListener('click', () => {
+        this.toggleAutoPlay();
+      });
+    }
+
+    // Dock Minimize toggle button (Chevron Down)
+    if (this.btnToggleMinimize) {
+      this.btnToggleMinimize.addEventListener('click', () => {
+        this.toggleDock(true);
+      });
+    }
+
+    // Dock Expand toggle button (Chevron Up / Buka)
+    if (this.btnToggleExpand) {
+      this.btnToggleExpand.addEventListener('click', () => {
+        this.toggleDock(false);
+      });
+    }
+
+    // Tapping minimized pill content expands it
+    if (this.dockMinimizedClickArea) {
+      this.dockMinimizedClickArea.addEventListener('click', () => {
+        this.toggleDock(false);
       });
     }
 
@@ -92,6 +130,36 @@ export class SimulationController {
     // Initial render
     this.setPumpStatus(true);
     this.onElevationChange(WATER_SIMULATION_CONFIG.DEFAULT_ELEVATION_M);
+  }
+
+  /**
+   * Toggles the water simulation dock between compact pill and expanded slider
+   * @param {boolean} [isMinimized]
+   */
+  toggleDock(isMinimized) {
+    this.isDockMinimized = typeof isMinimized === 'boolean' ? isMinimized : !this.isDockMinimized;
+    if (this.isDockMinimized) {
+      if (this.dockExpandedView) this.dockExpandedView.classList.add('hidden');
+      if (this.dockMinimizedView) this.dockMinimizedView.classList.remove('hidden');
+    } else {
+      if (this.dockExpandedView) this.dockExpandedView.classList.remove('hidden');
+      if (this.dockMinimizedView) this.dockMinimizedView.classList.add('hidden');
+    }
+    this.triggerHaptic(10);
+  }
+
+  /**
+   * Triggers micro-haptic vibration for tactile feedback on mobile devices
+   * @param {number} [duration=10] Duration in milliseconds
+   */
+  triggerHaptic(duration = 10) {
+    if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+      try {
+        navigator.vibrate(duration);
+      } catch {
+        // Silently ignore if not supported or disabled
+      }
+    }
   }
 
   /**
@@ -121,6 +189,20 @@ export class SimulationController {
       }
     }
 
+    // Synchronize mobile quick action pump chip
+    const chipPump = document.getElementById('btn-chip-pump');
+    const chipPumpLabel = document.getElementById('chip-pump-label');
+    if (chipPumpLabel) {
+      chipPumpLabel.textContent = this.isPumpActive ? '⚡ Pompa: AKTIF' : '⚡ Pompa: PADAM';
+    }
+    if (chipPump) {
+      if (this.isPumpActive) {
+        chipPump.className = 'btn-quick-chip px-2.5 py-1 rounded-xl text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1 shrink-0 active:scale-95 transition-transform cursor-pointer';
+      } else {
+        chipPump.className = 'btn-quick-chip px-2.5 py-1 rounded-xl text-[11px] font-bold bg-rose-50 text-rose-700 border border-rose-300 flex items-center gap-1 shrink-0 active:scale-95 transition-transform cursor-pointer animate-pulse';
+      }
+    }
+
     if (this.pumpCapacityNote) {
       if (this.isPumpActive) {
         this.pumpCapacityNote.textContent = '3 Unit pompa submersible beroperasi penuh. Kolam retensi aktif membuang debit ke laut.';
@@ -128,6 +210,8 @@ export class SimulationController {
         this.pumpCapacityNote.textContent = 'Peringatan: Pompa polder padam / macet! Kolam retensi meluap ke permukiman Tegalsari.';
       }
     }
+
+    this.triggerHaptic(12);
 
     // Immediately re-evaluate building inundation under new pump state
     this.onElevationChange(this.pendingElevation);
@@ -154,6 +238,7 @@ export class SimulationController {
       this.slider.value = scenario.elevationMeters.toFixed(1);
     }
     this.requestElevationUpdate(scenario.elevationMeters);
+    this.triggerHaptic(15);
 
     console.log(`[SimulationController] Scenario applied: ${scenario.name} (Elev: ${scenario.elevationMeters}m, Pump: ${scenario.pumpActive})`);
   }
@@ -202,6 +287,16 @@ export class SimulationController {
       this.btnAutoPlay.classList.add('bg-rose-50', 'text-rose-700', 'border-rose-300');
     }
 
+    if (this.btnMinimizedPlay) {
+      this.btnMinimizedPlay.innerHTML = `
+        <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        <span>Jeda</span>
+      `;
+      this.btnMinimizedPlay.classList.add('bg-rose-50', 'text-rose-700', 'border-rose-300');
+    }
+
+    this.triggerHaptic(15);
+
     this.playInterval = setInterval(() => {
       let currentVal = parseFloat(this.slider.value);
       currentVal += this.playDirection * WATER_SIMULATION_CONFIG.AUTO_PLAY_STEP_M;
@@ -232,11 +327,25 @@ export class SimulationController {
       `;
       this.btnAutoPlay.classList.remove('bg-rose-50', 'text-rose-700', 'border-rose-300');
     }
+
+    if (this.btnMinimizedPlay) {
+      this.btnMinimizedPlay.innerHTML = `
+        <svg class="w-3 h-3 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <span>Putar</span>
+      `;
+      this.btnMinimizedPlay.classList.remove('bg-rose-50', 'text-rose-700', 'border-rose-300');
+    }
+
+    this.triggerHaptic(10);
   }
 
   onElevationChange(elevationMeters) {
     if (this.elevationDisplay) {
       this.elevationDisplay.textContent = `${elevationMeters.toFixed(1)} m`;
+    }
+
+    if (this.minimizedElevationDisplay) {
+      this.minimizedElevationDisplay.textContent = `${elevationMeters.toFixed(1)} m`;
     }
 
     if (this.waterLayer) {

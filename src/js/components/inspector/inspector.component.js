@@ -33,9 +33,16 @@ export class InspectorComponent {
     this.title = document.getElementById('inspector-title');
     this.body = document.getElementById('inspector-body');
     this.btnClose = document.getElementById('btn-close-inspector');
+    this.btnDismissBottom = document.getElementById('btn-dismiss-inspector-bottom');
 
     if (this.btnClose && this.drawer) {
       this.btnClose.addEventListener('click', () => {
+        this.close();
+      });
+    }
+
+    if (this.btnDismissBottom && this.drawer) {
+      this.btnDismissBottom.addEventListener('click', () => {
         this.close();
       });
     }

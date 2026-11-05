@@ -7,6 +7,70 @@
 import { RISK_COLOR_PALETTE, CAUSAL_HAZARD_CONSTANTS } from '../config/map.constants.js';
 import { SpatialDataService } from '../services/spatial-data.service.js';
 
+/**
+ * Calculates a single centroid Point FeatureCollection from Polygon or MultiPolygon features.
+ * Guarantees MapLibre renders exactly ONE label per entity, completely eliminating
+ * tile-boundary label duplication, cutoff text, and multi-tile polygon overlap.
+ * @param {Object} geojson
+ * @returns {Object} FeatureCollection of Point features
+ */
+function createCentroidPointCollection(geojson) {
+  if (!geojson || !geojson.features) {
+    return { type: 'FeatureCollection', features: [] };
+  }
+
+  const pointFeatures = geojson.features.map(feature => {
+    const geom = feature.geometry;
+    let coords = [0, 0];
+
+    if (geom.type === 'Point') {
+      coords = geom.coordinates;
+    } else if (geom.type === 'Polygon') {
+      const ring = geom.coordinates[0];
+      let sumX = 0;
+      let sumY = 0;
+      const count = ring.length > 1 ? ring.length - 1 : ring.length;
+      for (let i = 0; i < count; i++) {
+        sumX += ring[i][0];
+        sumY += ring[i][1];
+      }
+      coords = [sumX / count, sumY / count];
+    } else if (geom.type === 'MultiPolygon') {
+      let maxLen = 0;
+      let targetRing = geom.coordinates[0][0];
+      for (const poly of geom.coordinates) {
+        if (poly[0].length > maxLen) {
+          maxLen = poly[0].length;
+          targetRing = poly[0];
+        }
+      }
+      let sumX = 0;
+      let sumY = 0;
+      const count = targetRing.length > 1 ? targetRing.length - 1 : targetRing.length;
+      for (let i = 0; i < count; i++) {
+        sumX += targetRing[i][0];
+        sumY += targetRing[i][1];
+      }
+      coords = [sumX / count, sumY / count];
+    }
+
+    return {
+      type: 'Feature',
+      id: feature.id || feature.properties?.id,
+      properties: { ...feature.properties },
+      geometry: {
+        type: 'Point',
+        coordinates: coords
+      }
+    };
+  });
+
+  return {
+    type: 'FeatureCollection',
+    features: pointFeatures
+  };
+}
+
 export class HazardLayer {
   /**
    * @param {maplibregl.Map} map
@@ -14,10 +78,14 @@ export class HazardLayer {
   constructor(map) {
     this.map = map;
     this.urbanRiskSourceId = 'urban-risk-source';
+    this.urbanRiskLabelSourceId = 'urban-risk-label-source';
     this.guciRiskSourceId = 'guci-risk-source';
+    this.guciRiskLabelSourceId = 'guci-risk-label-source';
     this.drainageSourceId = 'drainage-source';
     this.subsidenceSourceId = 'subsidence-source';
+    this.subsidenceLabelSourceId = 'subsidence-label-source';
     this.salineSourceId = 'saline-source';
+    this.salineLabelSourceId = 'saline-label-source';
     this.wasteSourceId = 'waste-source';
 
     this.urbanFeatures = [];
@@ -70,6 +138,10 @@ export class HazardLayer {
       this.urbanFeatures = data.features;
 
       this.map.addSource(this.urbanRiskSourceId, { type: 'geojson', data });
+      this.map.addSource(this.urbanRiskLabelSourceId, {
+        type: 'geojson',
+        data: createCentroidPointCollection(data)
+      });
 
       // Polygon Fill
       this.map.addLayer({
@@ -109,7 +181,7 @@ export class HazardLayer {
       this.map.addLayer({
         id: 'urban-risk-labels',
         type: 'symbol',
-        source: this.urbanRiskSourceId,
+        source: this.urbanRiskLabelSourceId,
         minzoom: 12,
         layout: {
           'text-field': [
@@ -168,6 +240,10 @@ export class HazardLayer {
       const data = await SpatialDataService.fetchGeoJson(url);
 
       this.map.addSource(this.guciRiskSourceId, { type: 'geojson', data });
+      this.map.addSource(this.guciRiskLabelSourceId, {
+        type: 'geojson',
+        data: createCentroidPointCollection(data)
+      });
 
       this.map.addLayer({
         id: 'guci-risk-fill',
@@ -205,7 +281,7 @@ export class HazardLayer {
       this.map.addLayer({
         id: 'guci-risk-labels',
         type: 'symbol',
-        source: this.guciRiskSourceId,
+        source: this.guciRiskLabelSourceId,
         minzoom: 11,
         layout: {
           'text-field': [
@@ -322,6 +398,10 @@ export class HazardLayer {
       this.subsidenceFeatures = data.features;
 
       this.map.addSource(this.subsidenceSourceId, { type: 'geojson', data });
+      this.map.addSource(this.subsidenceLabelSourceId, {
+        type: 'geojson',
+        data: createCentroidPointCollection(data)
+      });
 
       // Fill Layer (Initially off for clean initial view)
       this.map.addLayer({
@@ -352,11 +432,11 @@ export class HazardLayer {
         }
       });
 
-      // Subsidence Label (Strict Anti-Overlap)
+      // Subsidence Label (Strict Anti-Overlap via Single-Centroid Point Source)
       this.map.addLayer({
         id: 'subsidence-labels',
         type: 'symbol',
-        source: this.subsidenceSourceId,
+        source: this.subsidenceLabelSourceId,
         minzoom: 12,
         layout: {
           'visibility': 'none',
@@ -369,12 +449,13 @@ export class HazardLayer {
             ' cm/th'
           ],
           'text-font': ['Open Sans Semibold'],
-          'text-size': 11,
-          'text-anchor': 'center',
+          'text-size': 10.5,
+          'text-offset': [0, 1.2],
+          'text-anchor': 'top',
           'text-allow-overlap': false,
           'text-ignore-placement': false,
           'symbol-avoid-edges': true,
-          'text-variable-anchor': ['center', 'top', 'bottom', 'left', 'right'],
+          'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
           'text-radial-offset': 0.5,
           'text-justify': 'center'
         },
@@ -408,6 +489,10 @@ export class HazardLayer {
       this.salineFeatures = data.features;
 
       this.map.addSource(this.salineSourceId, { type: 'geojson', data });
+      this.map.addSource(this.salineLabelSourceId, {
+        type: 'geojson',
+        data: createCentroidPointCollection(data)
+      });
 
       // Translucent Amber Buffer Fill (Initially off for clean initial view)
       this.map.addLayer({
@@ -438,11 +523,11 @@ export class HazardLayer {
         }
       });
 
-      // Label (Strict Anti-Overlap)
+      // Label (Strict Anti-Overlap via Single-Centroid Point Source)
       this.map.addLayer({
         id: 'saline-labels',
         type: 'symbol',
-        source: this.salineSourceId,
+        source: this.salineLabelSourceId,
         minzoom: 12,
         layout: {
           'visibility': 'none',
@@ -454,12 +539,13 @@ export class HazardLayer {
             ' ppt'
           ],
           'text-font': ['Open Sans Semibold'],
-          'text-size': 11,
-          'text-anchor': 'center',
+          'text-size': 10.5,
+          'text-offset': [0, -1.2],
+          'text-anchor': 'bottom',
           'text-allow-overlap': false,
           'text-ignore-placement': false,
           'symbol-avoid-edges': true,
-          'text-variable-anchor': ['center', 'top', 'bottom', 'left', 'right'],
+          'text-variable-anchor': ['bottom', 'top', 'left', 'right'],
           'text-radial-offset': 0.5,
           'text-justify': 'center'
         },
