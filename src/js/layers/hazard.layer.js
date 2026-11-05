@@ -119,6 +119,7 @@ export class HazardLayer {
             ['to-string', ['get', 'elevasi_rata_m']],
             ' mdpl'
           ],
+          'text-font': ['Open Sans Semibold'],
           'text-size': [
             'interpolate',
             ['linear'],
@@ -205,6 +206,7 @@ export class HazardLayer {
             ['to-string', ['get', 'kemiringan_lereng_derajat']],
             '°)'
           ],
+          'text-font': ['Open Sans Semibold'],
           'text-size': 11.5,
           'text-anchor': 'center'
         },
@@ -342,6 +344,7 @@ export class HazardLayer {
             ['to-string', ['get', 'laju_penurunan_cm_tahun']],
             ' cm/th'
           ],
+          'text-font': ['Open Sans Semibold'],
           'text-size': 11,
           'text-anchor': 'center'
         },
@@ -420,6 +423,7 @@ export class HazardLayer {
             ['to-string', ['get', 'salinitas_air_tanah_ppt']],
             ' ppt'
           ],
+          'text-font': ['Open Sans Semibold'],
           'text-size': 11,
           'text-anchor': 'center'
         },

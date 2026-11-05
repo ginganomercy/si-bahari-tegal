@@ -25,6 +25,7 @@ export class TerrainManager {
       container: containerId,
       style: {
         version: 8,
+        glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
         sources: {
           'basemap-tiles': {
             type: 'raster',
@@ -32,6 +33,15 @@ export class TerrainManager {
             tileSize: 256,
             attribution: defaultBasemap.attribution,
             maxzoom: defaultBasemap.maxzoom
+          },
+          'hillshade-source': {
+            type: 'raster-dem',
+            tiles: [
+              'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'
+            ],
+            encoding: 'terrarium',
+            tileSize: 256,
+            maxzoom: 15
           },
           'terrain-source': {
             type: 'raster-dem',
@@ -58,10 +68,10 @@ export class TerrainManager {
           {
             id: 'hillshading',
             type: 'hillshade',
-            source: 'terrain-source',
+            source: 'hillshade-source',
             paint: {
-              'hillshade-exaggeration': 0.35,
-              'hillshade-shadow-color': '#1e293b',
+              'hillshade-exaggeration': 0.45,
+              'hillshade-shadow-color': '#0f172a',
               'hillshade-highlight-color': '#ffffff'
             }
           }
@@ -88,6 +98,14 @@ export class TerrainManager {
       visualizePitch: true,
       showCompass: true
     }), 'top-right');
+
+    // Filter benign tile aborts during fast camera flights
+    map.on('error', (e) => {
+      if (e?.error?.name === 'AbortError' || e?.error?.message?.includes('abort')) {
+        return;
+      }
+      console.warn('[MapLibre Notice]', e?.error?.message || e);
+    });
 
     map.on('load', () => {
       try {

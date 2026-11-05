@@ -86,8 +86,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const dataUrls = SpatialDataService.getDataUrls();
 
-      // Load spatial layers concurrently
-      await Promise.all([
+      // Load spatial layers concurrently with fail-safe settlement
+      await Promise.allSettled([
         buildingsLayer.init(dataUrls.buildings),
         hazardLayer.init(dataUrls)
       ]);

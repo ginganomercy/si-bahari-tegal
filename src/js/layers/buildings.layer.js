@@ -28,7 +28,8 @@ export class BuildingsLayer {
 
       this.map.addSource(this.sourceId, {
         type: 'geojson',
-        data: this.buildingsData
+        data: this.buildingsData,
+        promoteId: 'id'
       });
 
       this.map.addLayer({
