@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "python scripts/serve.py",
+    "test": "python scripts/verify_integrity.py",
     "data:seed": "python scripts/generate_spatial_seed.py",
     "data:analyze": "python scripts/run_hybrid_analysis.py",
     "data:verify": "python scripts/verify_integrity.py"

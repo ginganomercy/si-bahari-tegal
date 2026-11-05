@@ -4,6 +4,7 @@
  */
 
 import { RISK_COLOR_PALETTE, WEBGL_CONFIG, POLDER_PUMP_CONFIG } from '../config/map.constants.js';
+import { SpatialDataService } from '../services/spatial-data.service.js';
 
 export class BuildingsLayer {
   /**
@@ -23,11 +24,7 @@ export class BuildingsLayer {
    */
   async init(geojsonUrl) {
     try {
-      const response = await fetch(geojsonUrl);
-      if (!response.ok) {
-        throw new Error(`Failed to load buildings data: ${response.status} ${response.statusText}`);
-      }
-      this.buildingsData = await response.json();
+      this.buildingsData = await SpatialDataService.fetchGeoJson(geojsonUrl);
 
       this.map.addSource(this.sourceId, {
         type: 'geojson',

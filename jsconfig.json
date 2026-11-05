@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "target": "ES2022",
+    "strictNullChecks": false,
+    "strictFunctionTypes": true
+  },
+  "include": [
+    "src/js/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "data"
+  ]
+}

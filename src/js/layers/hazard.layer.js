@@ -5,6 +5,7 @@
  */
 
 import { RISK_COLOR_PALETTE, CAUSAL_HAZARD_CONSTANTS } from '../config/map.constants.js';
+import { SpatialDataService } from '../services/spatial-data.service.js';
 
 export class HazardLayer {
   /**
@@ -65,8 +66,7 @@ export class HazardLayer {
    */
   async _loadUrbanRisk(url) {
     try {
-      const res = await fetch(url);
-      const data = await res.json();
+      const data = await SpatialDataService.fetchGeoJson(url);
       this.urbanFeatures = data.features;
 
       this.map.addSource(this.urbanRiskSourceId, { type: 'geojson', data });
@@ -165,8 +165,7 @@ export class HazardLayer {
    */
   async _loadGuciRisk(url) {
     try {
-      const res = await fetch(url);
-      const data = await res.json();
+      const data = await SpatialDataService.fetchGeoJson(url);
 
       this.map.addSource(this.guciRiskSourceId, { type: 'geojson', data });
 
@@ -235,8 +234,7 @@ export class HazardLayer {
    */
   async _loadDrainagePoints(url) {
     try {
-      const res = await fetch(url);
-      const data = await res.json();
+      const data = await SpatialDataService.fetchGeoJson(url);
 
       this.map.addSource(this.drainageSourceId, { type: 'geojson', data });
 
@@ -301,8 +299,7 @@ export class HazardLayer {
    */
   async _loadSubsidence(url) {
     try {
-      const res = await fetch(url);
-      const data = await res.json();
+      const data = await SpatialDataService.fetchGeoJson(url);
       this.subsidenceFeatures = data.features;
 
       this.map.addSource(this.subsidenceSourceId, { type: 'geojson', data });
@@ -381,8 +378,7 @@ export class HazardLayer {
    */
   async _loadSalineIntrusion(url) {
     try {
-      const res = await fetch(url);
-      const data = await res.json();
+      const data = await SpatialDataService.fetchGeoJson(url);
       this.salineFeatures = data.features;
 
       this.map.addSource(this.salineSourceId, { type: 'geojson', data });
@@ -460,8 +456,7 @@ export class HazardLayer {
    */
   async _loadWasteChokes(url) {
     try {
-      const res = await fetch(url);
-      const data = await res.json();
+      const data = await SpatialDataService.fetchGeoJson(url);
       this.wasteFeatures = data.features;
 
       this.map.addSource(this.wasteSourceId, { type: 'geojson', data });
