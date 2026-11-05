@@ -66,7 +66,8 @@ export class TerrainManager {
       maxZoom: 21,
       renderWorldCopies: false,
       maxTileCacheSize: 100,
-      fadeDuration: 0
+      fadeDuration: 0,
+      trackResize: false
     });
 
     // Navigation control
@@ -74,6 +75,21 @@ export class TerrainManager {
       visualizePitch: true,
       showCompass: true
     }), 'top-right');
+
+    // Debounced, safe RAF resize handler (prevents TaskQueue re-entrancy crash)
+    let isResizeScheduled = false;
+    const safeResize = () => {
+      if (isResizeScheduled) return;
+      isResizeScheduled = true;
+      requestAnimationFrame(() => {
+        isResizeScheduled = false;
+        try {
+          map.resize();
+        } catch {
+          // Suppress benign concurrent render collisions
+        }
+      });
+    };
 
     // Filter benign tile aborts during fast camera flights
     map.on('error', (e) => {
@@ -84,10 +100,7 @@ export class TerrainManager {
     });
 
     map.on('load', () => {
-      // Deterministically calibrate WebGL viewport framebuffer size
-      map.resize();
-      requestAnimationFrame(() => map.resize());
-      setTimeout(() => map.resize(), 200);
+      safeResize();
 
       try {
         map.setTerrain({
@@ -101,7 +114,19 @@ export class TerrainManager {
     });
 
     if (typeof window !== 'undefined') {
-      window.addEventListener('resize', () => map.resize());
+      window.addEventListener('resize', safeResize);
+
+      // Global suppression of benign network tile cancellation abort errors
+      window.addEventListener('unhandledrejection', (event) => {
+        const reason = event.reason;
+        const isAbort =
+          reason?.name === 'AbortError' ||
+          reason?.message?.includes?.('abort') ||
+          reason?.message?.includes?.('signal is aborted');
+        if (isAbort) {
+          event.preventDefault();
+        }
+      });
     }
 
     return map;

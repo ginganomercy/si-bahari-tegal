@@ -46,6 +46,10 @@ html, body {
     width: min(88vw, 360px) !important;
     max-width: 100vw;
   }
+  .maplibregl-ctrl-bottom-right {
+    bottom: 5.5rem !important;
+    right: 8px !important;
+  }
 }
 
 /* ==========================================================================

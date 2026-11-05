@@ -315,11 +315,14 @@ export class HazardLayer {
 
       this.map.addSource(this.subsidenceSourceId, { type: 'geojson', data });
 
-      // Fill Layer
+      // Fill Layer (Initially off for clean initial view)
       this.map.addLayer({
         id: 'subsidence-fill',
         type: 'fill',
         source: this.subsidenceSourceId,
+        layout: {
+          'visibility': 'none'
+        },
         paint: {
           'fill-color': CAUSAL_HAZARD_CONSTANTS.LAND_SUBSIDENCE.COLOR_FILL,
           'fill-opacity': 0.28
@@ -331,6 +334,9 @@ export class HazardLayer {
         id: 'subsidence-line',
         type: 'line',
         source: this.subsidenceSourceId,
+        layout: {
+          'visibility': 'none'
+        },
         paint: {
           'line-color': CAUSAL_HAZARD_CONSTANTS.LAND_SUBSIDENCE.COLOR_BORDER,
           'line-width': 2.5,
@@ -338,13 +344,14 @@ export class HazardLayer {
         }
       });
 
-      // Subsidence Label
+      // Subsidence Label (Strict Anti-Overlap)
       this.map.addLayer({
         id: 'subsidence-labels',
         type: 'symbol',
         source: this.subsidenceSourceId,
         minzoom: 12,
         layout: {
+          'visibility': 'none',
           'text-field': [
             'concat',
             'Amblesan: ',
@@ -355,7 +362,13 @@ export class HazardLayer {
           ],
           'text-font': ['Open Sans Semibold'],
           'text-size': 11,
-          'text-anchor': 'center'
+          'text-anchor': 'center',
+          'text-allow-overlap': false,
+          'text-ignore-placement': false,
+          'symbol-avoid-edges': true,
+          'text-variable-anchor': ['center', 'top', 'bottom', 'left', 'right'],
+          'text-radial-offset': 0.5,
+          'text-justify': 'center'
         },
         paint: {
           'text-color': '#581c87',
@@ -388,11 +401,14 @@ export class HazardLayer {
 
       this.map.addSource(this.salineSourceId, { type: 'geojson', data });
 
-      // Translucent Amber Buffer Fill
+      // Translucent Amber Buffer Fill (Initially off for clean initial view)
       this.map.addLayer({
         id: 'saline-fill',
         type: 'fill',
         source: this.salineSourceId,
+        layout: {
+          'visibility': 'none'
+        },
         paint: {
           'fill-color': CAUSAL_HAZARD_CONSTANTS.SALINE_INTRUSION.COLOR_FILL,
           'fill-opacity': 0.22
@@ -404,6 +420,9 @@ export class HazardLayer {
         id: 'saline-line',
         type: 'line',
         source: this.salineSourceId,
+        layout: {
+          'visibility': 'none'
+        },
         paint: {
           'line-color': CAUSAL_HAZARD_CONSTANTS.SALINE_INTRUSION.COLOR_BORDER,
           'line-width': 2.2,
@@ -411,13 +430,14 @@ export class HazardLayer {
         }
       });
 
-      // Label
+      // Label (Strict Anti-Overlap)
       this.map.addLayer({
         id: 'saline-labels',
         type: 'symbol',
         source: this.salineSourceId,
         minzoom: 12,
         layout: {
+          'visibility': 'none',
           'text-field': [
             'concat',
             ['get', 'nama_zona'],
@@ -427,7 +447,13 @@ export class HazardLayer {
           ],
           'text-font': ['Open Sans Semibold'],
           'text-size': 11,
-          'text-anchor': 'center'
+          'text-anchor': 'center',
+          'text-allow-overlap': false,
+          'text-ignore-placement': false,
+          'symbol-avoid-edges': true,
+          'text-variable-anchor': ['center', 'top', 'bottom', 'left', 'right'],
+          'text-radial-offset': 0.5,
+          'text-justify': 'center'
         },
         paint: {
           'text-color': '#78350f',
