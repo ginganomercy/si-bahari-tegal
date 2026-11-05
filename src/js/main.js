@@ -200,6 +200,25 @@ function _setupHeaderControls(map, cameraController, landingComponent, tutorialC
     selectBasemap.addEventListener('change', (e) => TerrainManager.switchBasemap(map, e.target.value));
   }
 
+  // 3D Terrain on/off toggle for ultra-smooth 60 FPS performance
+  const btnToggleTerrain = document.getElementById('btn-toggle-terrain');
+  const labelTerrainStatus = document.getElementById('label-terrain-status');
+  let isTerrainEnabled = true;
+
+  if (btnToggleTerrain && labelTerrainStatus) {
+    btnToggleTerrain.addEventListener('click', () => {
+      isTerrainEnabled = !isTerrainEnabled;
+      TerrainManager.toggleTerrain(map, isTerrainEnabled);
+      if (isTerrainEnabled) {
+        labelTerrainStatus.textContent = '3D Aktif';
+        btnToggleTerrain.className = 'px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all border flex items-center gap-1.5 cursor-pointer shadow-sm bg-sky-50 text-sky-700 border-sky-300 hover:bg-sky-100';
+      } else {
+        labelTerrainStatus.textContent = 'Mode 2D';
+        btnToggleTerrain.className = 'px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all border flex items-center gap-1.5 cursor-pointer shadow-sm bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200';
+      }
+    });
+  }
+
   const btnResetNorth = document.getElementById('btn-reset-north');
   if (btnResetNorth) {
     btnResetNorth.addEventListener('click', () => cameraController.resetNorth());

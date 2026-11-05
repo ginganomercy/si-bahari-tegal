@@ -69,7 +69,7 @@ export class WaterSimulationLayer {
         'fill-extrusion-base': 0,
         // Opacity is 0 at 0.0m elevation, scaling smoothly as water rises
         'fill-extrusion-opacity': 0.0,
-        'fill-extrusion-vertical-gradient': true
+        'fill-extrusion-vertical-gradient': false
       }
     });
 

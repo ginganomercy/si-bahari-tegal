@@ -15,6 +15,7 @@ export class BuildingsLayer {
     this.sourceId = 'buildings-source';
     this.layerId = 'buildings-3d-extrusion';
     this.buildingsData = null;
+    this.submergedIds = new Set();
   }
 
   /**
@@ -51,7 +52,7 @@ export class BuildingsLayer {
           ],
           'fill-extrusion-base': 0,
           'fill-extrusion-opacity': 0.9,
-          'fill-extrusion-vertical-gradient': true
+          'fill-extrusion-vertical-gradient': false
         }
       });
 
@@ -94,11 +95,22 @@ export class BuildingsLayer {
         affectedCount++;
       }
 
-      // Update MapLibre feature state for high-performance GPU re-coloring
-      this.map.setFeatureState(
-        { source: this.sourceId, id: feat.properties.id },
-        { submerged: isSubmerged }
-      );
+      // High-performance State Diffing: mutate WebGL feature-state ONLY if state changed!
+      const buildingId = feat.properties.id;
+      const wasSubmerged = this.submergedIds.has(buildingId);
+
+      if (isSubmerged !== wasSubmerged) {
+        if (isSubmerged) {
+          this.submergedIds.add(buildingId);
+        } else {
+          this.submergedIds.delete(buildingId);
+        }
+
+        this.map.setFeatureState(
+          { source: this.sourceId, id: buildingId },
+          { submerged: isSubmerged }
+        );
+      }
     }
 
     return affectedCount;

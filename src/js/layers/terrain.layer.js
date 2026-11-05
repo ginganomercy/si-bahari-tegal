@@ -53,7 +53,7 @@ export class TerrainManager {
             maxzoom: 22,
             paint: {
               'raster-resampling': 'linear',
-              'raster-fade-duration': 100
+              'raster-fade-duration': 0
             }
           }
         ]
@@ -63,7 +63,10 @@ export class TerrainManager {
       pitch: initial.pitch,
       bearing: initial.bearing,
       maxPitch: 80,
-      maxZoom: 21
+      maxZoom: 21,
+      renderWorldCopies: false,
+      maxTileCacheSize: 100,
+      fadeDuration: 0
     });
 
     // Navigation control
@@ -139,7 +142,7 @@ export class TerrainManager {
           maxzoom: 22,
           paint: {
             'raster-resampling': 'linear',
-            'raster-fade-duration': 100
+            'raster-fade-duration': 0
           }
         },
         firstLayerId
@@ -148,6 +151,29 @@ export class TerrainManager {
       console.log(`[TerrainManager] Basemap switched to: ${config.name}`);
     } catch (err) {
       console.error('[TerrainManager] Error switching basemap:', err);
+    }
+  }
+
+  /**
+   * Toggles 3D terrain elevation mesh on/off dynamically
+   * @param {maplibregl.Map} map
+   * @param {boolean} enable
+   */
+  static toggleTerrain(map, enable) {
+    if (!map) return;
+    try {
+      if (enable) {
+        map.setTerrain({
+          source: 'terrain-source',
+          exaggeration: WEBGL_CONFIG.TERRAIN_EXAGGERATION
+        });
+        console.log('[TerrainManager] 3D Terrain mesh re-enabled.');
+      } else {
+        map.setTerrain(null);
+        console.log('[TerrainManager] Switched to high-performance 2D/2.5D mode (Terrain disabled).');
+      }
+    } catch (err) {
+      console.warn('[TerrainManager] Error toggling terrain:', err.message);
     }
   }
 }

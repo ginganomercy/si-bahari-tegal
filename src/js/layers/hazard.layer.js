@@ -148,13 +148,6 @@ export class HazardLayer {
         }
       });
 
-      this.map.on('mouseenter', 'urban-risk-fill', () => {
-        this.map.getCanvas().style.cursor = 'pointer';
-      });
-      this.map.on('mouseleave', 'urban-risk-fill', () => {
-        this.map.getCanvas().style.cursor = '';
-      });
-
     } catch (err) {
       console.error('[HazardLayer] Error loading urban risk layer:', err);
     }
@@ -283,13 +276,6 @@ export class HazardLayer {
         }
       });
 
-      this.map.on('mouseenter', 'drainage-points-core', () => {
-        this.map.getCanvas().style.cursor = 'pointer';
-      });
-      this.map.on('mouseleave', 'drainage-points-core', () => {
-        this.map.getCanvas().style.cursor = '';
-      });
-
     } catch (err) {
       console.error('[HazardLayer] Error loading drainage points:', err);
     }
@@ -361,13 +347,6 @@ export class HazardLayer {
         if (this.onFeatureInspectCallback) {
           this.onFeatureInspectCallback('SUBSIDENCE', props);
         }
-      });
-
-      this.map.on('mouseenter', 'subsidence-fill', () => {
-        this.map.getCanvas().style.cursor = 'pointer';
-      });
-      this.map.on('mouseleave', 'subsidence-fill', () => {
-        this.map.getCanvas().style.cursor = '';
       });
 
     } catch (err) {
@@ -442,13 +421,6 @@ export class HazardLayer {
         }
       });
 
-      this.map.on('mouseenter', 'saline-fill', () => {
-        this.map.getCanvas().style.cursor = 'pointer';
-      });
-      this.map.on('mouseleave', 'saline-fill', () => {
-        this.map.getCanvas().style.cursor = '';
-      });
-
     } catch (err) {
       console.error('[HazardLayer] Error loading saline intrusion layer:', err);
     }
@@ -496,13 +468,6 @@ export class HazardLayer {
         if (this.onFeatureInspectCallback) {
           this.onFeatureInspectCallback('WASTE', props);
         }
-      });
-
-      this.map.on('mouseenter', 'waste-points-core', () => {
-        this.map.getCanvas().style.cursor = 'pointer';
-      });
-      this.map.on('mouseleave', 'waste-points-core', () => {
-        this.map.getCanvas().style.cursor = '';
       });
 
     } catch (err) {
