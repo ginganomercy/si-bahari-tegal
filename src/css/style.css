@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "maplibre-gl/dist/maplibre-gl.css";
 
 @theme {
   --color-brand-50: #f0f9ff;
@@ -8,6 +9,29 @@
   --color-brand-600: #0284c7;
   --color-brand-700: #0369a1;
   --color-brand-900: #0c4a6e;
+}
+
+/* ==========================================================================
+   Tegal 3D WebGIS — Viewport Geometry & Map Container
+   ========================================================================== */
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#map {
+  position: absolute;
+  top: 3.5rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: calc(100vh - 3.5rem);
+  background-color: #0f172a;
 }
 
 /* ==========================================================================

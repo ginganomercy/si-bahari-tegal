@@ -34,15 +34,6 @@ export class TerrainManager {
             attribution: defaultBasemap.attribution,
             maxzoom: defaultBasemap.maxzoom
           },
-          'hillshade-source': {
-            type: 'raster-dem',
-            tiles: [
-              'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png'
-            ],
-            encoding: 'terrarium',
-            tileSize: 256,
-            maxzoom: 15
-          },
           'terrain-source': {
             type: 'raster-dem',
             tiles: [
@@ -64,26 +55,8 @@ export class TerrainManager {
               'raster-resampling': 'linear',
               'raster-fade-duration': 100
             }
-          },
-          {
-            id: 'hillshading',
-            type: 'hillshade',
-            source: 'hillshade-source',
-            paint: {
-              'hillshade-exaggeration': 0.45,
-              'hillshade-shadow-color': '#0f172a',
-              'hillshade-highlight-color': '#ffffff'
-            }
           }
-        ],
-        sky: {
-          'sky-color': '#38bdf8',
-          'sky-horizon-blend': 0.6,
-          'horizon-color': '#bae6fd',
-          'horizon-fog-blend': 0.8,
-          'fog-color': '#f0f9ff',
-          'fog-ground-blend': 0.4
-        }
+        ]
       },
       center: initial.center,
       zoom: initial.zoom,
@@ -108,6 +81,11 @@ export class TerrainManager {
     });
 
     map.on('load', () => {
+      // Deterministically calibrate WebGL viewport framebuffer size
+      map.resize();
+      requestAnimationFrame(() => map.resize());
+      setTimeout(() => map.resize(), 200);
+
       try {
         map.setTerrain({
           source: 'terrain-source',
@@ -118,6 +96,10 @@ export class TerrainManager {
         console.warn('[TerrainManager] Terrain notice:', err.message);
       }
     });
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', () => map.resize());
+    }
 
     return map;
   }
@@ -147,6 +129,7 @@ export class TerrainManager {
         maxzoom: config.maxzoom
       });
 
+      const firstLayerId = map.getStyle().layers?.[0]?.id;
       map.addLayer(
         {
           id: 'basemap-layer',
@@ -159,7 +142,7 @@ export class TerrainManager {
             'raster-fade-duration': 100
           }
         },
-        'hillshading'
+        firstLayerId
       );
 
       console.log(`[TerrainManager] Basemap switched to: ${config.name}`);

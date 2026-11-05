@@ -114,6 +114,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       // Wire Polder Pump Inspector Trigger
       _setupPolderInspectorButton(cameraController, inspectorComponent, () => simulationControllerInstance?.isPumpActive);
 
+      // Final viewport recalibration
+      map.resize();
+
       console.log('[SI-BAHARI 3D] System operational at 60 FPS.');
     });
 
