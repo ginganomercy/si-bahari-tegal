@@ -129,7 +129,11 @@ export class HazardLayer {
           ],
           'text-anchor': 'center',
           'text-allow-overlap': false,
-          'text-ignore-placement': false
+          'text-ignore-placement': false,
+          'symbol-avoid-edges': true,
+          'text-variable-anchor': ['center', 'top', 'bottom', 'left', 'right'],
+          'text-radial-offset': 0.5,
+          'text-justify': 'center'
         },
         paint: {
           'text-color': '#0f172a', // Deep Slate-900 for high daylight contrast
@@ -168,8 +172,14 @@ export class HazardLayer {
         type: 'fill',
         source: this.guciRiskSourceId,
         paint: {
-          'fill-color': '#dc2626',
-          'fill-opacity': 0.40
+          'fill-color': [
+            'match',
+            ['get', 'klasifikasi_risiko'],
+            'TINGGI', '#ef4444',
+            'SEDANG', '#f59e0b',
+            '#ef4444'
+          ],
+          'fill-opacity': 0.22
         }
       });
 
@@ -178,9 +188,15 @@ export class HazardLayer {
         type: 'line',
         source: this.guciRiskSourceId,
         paint: {
-          'line-color': '#991b1b',
-          'line-width': 2.5,
-          'line-dasharray': [2, 1]
+          'line-color': [
+            'match',
+            ['get', 'klasifikasi_risiko'],
+            'TINGGI', '#dc2626',
+            'SEDANG', '#d97706',
+            '#dc2626'
+          ],
+          'line-width': 2.0,
+          'line-dasharray': [3, 2]
         }
       });
 
@@ -201,12 +217,19 @@ export class HazardLayer {
           ],
           'text-font': ['Open Sans Semibold'],
           'text-size': 11.5,
-          'text-anchor': 'center'
+          'text-anchor': 'center',
+          'text-allow-overlap': false,
+          'text-ignore-placement': false,
+          'symbol-avoid-edges': true,
+          'text-variable-anchor': ['center', 'top', 'bottom', 'left', 'right'],
+          'text-radial-offset': 0.5,
+          'text-justify': 'center'
         },
         paint: {
           'text-color': '#7f1d1d',
           'text-halo-color': '#ffffff',
-          'text-halo-width': 3.0
+          'text-halo-width': 3.0,
+          'text-halo-blur': 0.5
         }
       });
 

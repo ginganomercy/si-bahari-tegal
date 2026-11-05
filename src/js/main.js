@@ -168,32 +168,78 @@ function _setupHeaderControls(map, cameraController, landingComponent, tutorialC
 
   const btnToggleDrawer = document.getElementById('btn-toggle-drawer');
   const drawer = document.getElementById('app-drawer');
-  if (btnToggleDrawer && drawer) {
-    btnToggleDrawer.addEventListener('click', () => drawer.classList.toggle('-translate-x-full'));
+  const drawerBackdrop = document.getElementById('drawer-backdrop');
+
+  const toggleDrawer = (forceOpen) => {
+    if (!drawer) return;
+    const isClosed = drawer.classList.contains('-translate-x-full');
+    const shouldOpen = forceOpen !== undefined ? forceOpen : isClosed;
+    if (shouldOpen) {
+      drawer.classList.remove('-translate-x-full');
+      if (drawerBackdrop) drawerBackdrop.classList.remove('hidden');
+    } else {
+      drawer.classList.add('-translate-x-full');
+      if (drawerBackdrop) drawerBackdrop.classList.add('hidden');
+    }
+  };
+
+  if (btnToggleDrawer) {
+    btnToggleDrawer.addEventListener('click', () => toggleDrawer());
+  }
+  if (drawerBackdrop) {
+    drawerBackdrop.addEventListener('click', () => toggleDrawer(false));
   }
 
+  // Zone Switchers (Synchronized Desktop & Mobile)
   const btnTegal = document.getElementById('btn-zone-tegal');
   const btnGuci = document.getElementById('btn-zone-guci');
+  const btnTegalMobile = document.getElementById('btn-zone-tegal-mobile');
+  const btnGuciMobile = document.getElementById('btn-zone-guci-mobile');
   const simDock = document.getElementById('panel-water-simulation') || document.querySelector('section.absolute.bottom-5');
+  const panelCoastal = document.getElementById('panel-coastal-analytics');
+  const panelGuci = document.getElementById('panel-guci-analytics');
 
-  const activeZoneClass = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-sky-800 bg-white shadow-sm border border-slate-200 cursor-pointer flex items-center gap-1.5';
-  const inactiveZoneClass = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all cursor-pointer flex items-center gap-1.5';
+  const activeZoneClass = 'px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-sky-800 bg-white shadow-sm border border-slate-200 cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0';
+  const inactiveZoneClass = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all cursor-pointer flex items-center gap-1.5 whitespace-nowrap shrink-0';
 
-  if (btnTegal && btnGuci) {
-    btnTegal.addEventListener('click', () => {
-      btnTegal.className = activeZoneClass;
-      btnGuci.className = inactiveZoneClass;
+  const selectZone = (zoneKey) => {
+    if (zoneKey === 'TEGAL') {
+      if (btnTegal) btnTegal.className = activeZoneClass;
+      if (btnGuci) btnGuci.className = inactiveZoneClass;
+      if (btnTegalMobile) {
+        btnTegalMobile.className = 'flex-1 px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-sky-800 bg-white shadow-sm border border-slate-200 cursor-pointer flex items-center justify-center gap-1.5 whitespace-nowrap';
+      }
+      if (btnGuciMobile) {
+        btnGuciMobile.className = 'flex-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all cursor-pointer flex items-center justify-center gap-1.5 whitespace-nowrap';
+      }
       cameraController.flyToZone('KOTA_TEGAL');
       if (simDock) simDock.style.display = 'flex';
-    });
-
-    btnGuci.addEventListener('click', () => {
-      btnGuci.className = activeZoneClass;
-      btnTegal.className = inactiveZoneClass;
+      if (panelCoastal) panelCoastal.classList.remove('hidden');
+      if (panelGuci) panelGuci.classList.add('hidden');
+    } else {
+      if (btnGuci) btnGuci.className = activeZoneClass;
+      if (btnTegal) btnTegal.className = inactiveZoneClass;
+      if (btnGuciMobile) {
+        btnGuciMobile.className = 'flex-1 px-3 py-1.5 rounded-lg text-xs font-bold transition-all text-sky-800 bg-white shadow-sm border border-slate-200 cursor-pointer flex items-center justify-center gap-1.5 whitespace-nowrap';
+      }
+      if (btnTegalMobile) {
+        btnTegalMobile.className = 'flex-1 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition-all cursor-pointer flex items-center justify-center gap-1.5 whitespace-nowrap';
+      }
       cameraController.flyToZone('GUCI_BUMIJAWA');
       if (simDock) simDock.style.display = 'none';
-    });
-  }
+      if (panelCoastal) panelCoastal.classList.add('hidden');
+      if (panelGuci) panelGuci.classList.remove('hidden');
+    }
+
+    if (window.innerWidth < 768) {
+      toggleDrawer(false);
+    }
+  };
+
+  if (btnTegal) btnTegal.addEventListener('click', () => selectZone('TEGAL'));
+  if (btnGuci) btnGuci.addEventListener('click', () => selectZone('GUCI'));
+  if (btnTegalMobile) btnTegalMobile.addEventListener('click', () => selectZone('TEGAL'));
+  if (btnGuciMobile) btnGuciMobile.addEventListener('click', () => selectZone('GUCI'));
 
   const selectBasemap = document.getElementById('select-basemap');
   if (selectBasemap) {
@@ -311,5 +357,14 @@ function _setupPolderInspectorButton(cameraController, inspectorComponent, getPu
       current_status: isPumpActive ? 'AKTIF BEROPERASI' : 'GAGAL / MATI TOTAL',
       is_active: isPumpActive
     });
+  });
+}
+
+// Register PWA ServiceWorker for Offline Emergency Disaster Resilience
+if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js', { scope: './' })
+      .then((reg) => console.log('[PWA] ServiceWorker active with scope:', reg.scope))
+      .catch((err) => console.warn('[PWA] ServiceWorker registration notice:', err?.message || err));
   });
 }

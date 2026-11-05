@@ -34,6 +34,20 @@ html, body {
   background-color: #0f172a;
 }
 
+@supports (height: 100dvh) {
+  #map {
+    height: calc(100dvh - 3.5rem);
+  }
+}
+
+/* Mobile Responsive Drawer Dimensions (Prevents Fullscreen Lockout) */
+@media (max-width: 767px) {
+  #app-drawer {
+    width: min(88vw, 360px) !important;
+    max-width: 100vw;
+  }
+}
+
 /* ==========================================================================
    Tegal 3D WebGIS — Light Mode Enterprise Styles & MapLibre Overrides
    ========================================================================== */
