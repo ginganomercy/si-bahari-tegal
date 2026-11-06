@@ -1,7 +1,7 @@
 /**
  * @file tutorial.template.js
- * @description Markup generator for the SI-BAHARI 3D Interactive Video Game Tutorial.
- * Provides SVG spotlight cutout mask, pulsing highlight ring, and floating enterprise dialog card.
+ * @description Markup generator for the SI-BAHARI 3D Interactive Walkthrough Tour.
+ * Provides SVG spotlight cutout mask, pulsing highlight ring, and responsive enterprise HUD popover card.
  */
 
 export function renderTutorialContainer() {
@@ -23,54 +23,54 @@ export function renderTutorialContainer() {
         <div class="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-sky-400 animate-ping"></div>
       </div>
 
-      <!-- Floating Tooltip Dialog Card (Enterprise Light Theme - Pure Solid White) -->
-      <div id="tutorial-popover-card" class="fixed z-[70] w-[380px] max-w-[calc(100vw-32px)] bg-white border border-slate-200 rounded-2xl shadow-2xl p-4 sm:p-5 text-slate-800 transition-all duration-300">
+      <!-- Responsive Tooltip / Mobile HUD Dock Card -->
+      <div id="tutorial-popover-card" class="fixed z-[70] w-full max-w-[min(420px,calc(100vw-24px))] sm:w-[380px] bg-white border border-slate-200/90 rounded-2xl shadow-2xl p-3.5 sm:p-5 text-slate-800 transition-all duration-300 flex flex-col justify-between">
         <!-- Caret Arrow Pointer pointing to Target Element -->
         <div id="tutorial-card-arrow" class="arrow-top"></div>
 
         <!-- Top Step Header -->
-        <div class="flex items-center justify-between gap-2 pb-2.5 border-b border-slate-100">
-          <div class="flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-sky-600 animate-pulse"></span>
-            <span id="tutorial-card-category" class="text-[10px] font-black uppercase tracking-wider text-sky-700">Panduan Fitur</span>
+        <div class="flex items-center justify-between gap-2 pb-2 border-b border-slate-100 shrink-0">
+          <div class="flex items-center gap-1.5 min-w-0">
+            <span class="w-2 h-2 rounded-full bg-sky-600 animate-pulse shrink-0"></span>
+            <span id="tutorial-card-category" class="text-[9.5px] sm:text-[10px] font-black uppercase tracking-wider text-sky-700 truncate">Panduan Fitur</span>
           </div>
-          <div class="flex items-center gap-2">
-            <span id="tutorial-card-step-badge" class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+          <div class="flex items-center gap-1.5 shrink-0">
+            <span id="tutorial-card-step-badge" class="text-[9.5px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200 whitespace-nowrap">
               Langkah 1 dari 5
             </span>
-            <button type="button" id="btn-tutorial-skip" class="text-[10px] font-semibold text-slate-500 hover:text-slate-800 cursor-pointer transition-colors" title="Lewati Tutorial (Esc)">
+            <button type="button" id="btn-tutorial-skip" class="text-[10px] sm:text-[11px] font-semibold text-slate-500 hover:text-slate-800 cursor-pointer transition-colors px-1 py-0.5" title="Lewati Tutorial (Esc)">
               Lewati (Esc)
             </button>
           </div>
         </div>
 
         <!-- Body Content -->
-        <div class="pt-3 space-y-2">
-          <h3 id="tutorial-card-title" class="text-sm sm:text-base font-black text-slate-900 leading-snug tracking-tight">
+        <div class="pt-2.5 space-y-1.5 sm:space-y-2">
+          <h3 id="tutorial-card-title" class="text-xs sm:text-sm font-black text-slate-900 leading-snug tracking-tight">
             Judul Langkah Tutorial
           </h3>
-          <p id="tutorial-card-description" class="text-xs text-slate-700 leading-relaxed font-normal">
+          <p id="tutorial-card-description" class="text-[11px] sm:text-xs text-slate-600 leading-relaxed font-normal">
             Deskripsi rinci mengenai fungsi tombol atau panel yang sedang disorot.
           </p>
 
-          <div id="tutorial-card-hint-box" class="bg-sky-50 border border-sky-200/90 rounded-xl px-3 py-2 flex items-center gap-2 text-[11px] text-sky-950 font-medium shadow-sm">
-            <svg class="w-4 h-4 text-sky-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <span id="tutorial-card-hint-text" class="text-sky-900 font-semibold">Aksi yang disarankan</span>
+          <div id="tutorial-card-hint-box" class="bg-sky-50 border border-sky-200/90 rounded-xl px-2.5 py-1.5 sm:px-3 sm:py-2 flex items-center gap-2 text-[10.5px] sm:text-[11px] text-sky-950 font-medium shadow-xs">
+            <svg class="w-3.5 h-3.5 text-sky-600 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span id="tutorial-card-hint-text" class="text-sky-900 font-semibold truncate">Aksi yang disarankan</span>
           </div>
         </div>
 
         <!-- Footer Navigation Controls -->
-        <div class="pt-4 mt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+        <div class="pt-3 mt-2 sm:mt-3 border-t border-slate-100 flex items-center justify-between gap-2 shrink-0">
           <!-- Step Progress Dots -->
-          <div id="tutorial-progress-dots" class="flex items-center gap-1.5">
+          <div id="tutorial-progress-dots" class="flex items-center gap-1 sm:gap-1.5 shrink-0">
             <!-- Populated dynamically via component -->
           </div>
 
-          <div class="flex items-center gap-2">
-            <button type="button" id="btn-tutorial-prev" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed">
-              ◄ Sebelumnya
+          <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <button type="button" id="btn-tutorial-prev" class="h-9 px-3 sm:px-3.5 rounded-xl text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed active:scale-95 flex items-center justify-center">
+              ◄ <span class="hidden xs:inline ml-1">Sebelumnya</span>
             </button>
-            <button type="button" id="btn-tutorial-next" class="px-4 py-1.5 rounded-xl text-xs font-extrabold text-white bg-sky-600 hover:bg-sky-700 shadow-md shadow-sky-600/30 transition-all cursor-pointer flex items-center gap-1 active:scale-95">
+            <button type="button" id="btn-tutorial-next" class="h-9 px-3.5 sm:px-4 rounded-xl text-xs font-black text-white bg-sky-600 hover:bg-sky-700 shadow-md shadow-sky-600/30 transition-all cursor-pointer flex items-center justify-center gap-1 active:scale-95 whitespace-nowrap">
               <span id="tutorial-btn-next-label">Selanjutnya ►</span>
             </button>
           </div>
@@ -79,4 +79,3 @@ export function renderTutorialContainer() {
     </div>
   `;
 }
-

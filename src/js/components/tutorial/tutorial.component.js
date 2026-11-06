@@ -1,8 +1,8 @@
 /**
  * @file tutorial.component.js
  * @description Native Game-Style Interactive Walkthrough Controller for SI-BAHARI 3D.
- * Computes SVG spotlight cutouts, dynamically anchors popover cards, orchestrates 3D camera sweeps,
- * and provides idempotent event binding with navigation locks and interactive progress dots.
+ * Features SVG spotlight cutouts, responsive Dual-Dock Mobile HUD architecture, adaptive target resolution,
+ * smooth drawer auto-scrolling, dynamic camera sweeps, and idempotent navigation locks.
  */
 
 import { TUTORIAL_STEPS } from './tutorial.steps.js';
@@ -11,15 +11,16 @@ import { renderTutorialContainer } from './tutorial.template.js';
 // Named Constants for Production Predictability & Rule Compliance
 const NAV_LOCK_DURATION_MS = 280;
 const DRAWER_SETTLE_DELAY_MS = 320;
-const PRELIMINARY_ALIGN_DELAY_MS = 50;
+const PRELIMINARY_ALIGN_DELAY_MS = 60;
 const SPOTLIGHT_PADDING_PX = 6;
 const POPOVER_GAP_PX = 14;
-const VIEWPORT_MARGIN_PX = 16;
+const VIEWPORT_MARGIN_PX = 12;
 const ARROW_HALF_SIZE_PX = 7;
 const ARROW_CLAMP_MIN_PX = 24;
 const ARROW_CLAMP_OFFSET_PX = 36;
 const DEFAULT_CARD_WIDTH_PX = 380;
-const DEFAULT_CARD_HEIGHT_PX = 260;
+const DEFAULT_CARD_HEIGHT_PX = 240;
+const MOBILE_BREAKPOINT_PX = 640;
 
 export class TutorialComponent {
   /**
@@ -120,7 +121,26 @@ export class TutorialComponent {
   }
 
   /**
-   * Starts the interactive tutorial strictly from step 0 with duplicate event safeguards
+   * Resolves target element dynamically based on viewport breakpoint
+   * @param {Object} step
+   * @returns {HTMLElement|null}
+   * @private
+   */
+  _resolveTarget(step) {
+    const isMobile = window.innerWidth < 768;
+    const selector = (isMobile && step.mobileTargetSelector)
+      ? step.mobileTargetSelector
+      : step.targetSelector;
+
+    let el = document.querySelector(selector);
+    if (!el && isMobile && step.targetSelector) {
+      el = document.querySelector(step.targetSelector);
+    }
+    return el;
+  }
+
+  /**
+   * Starts the interactive tutorial strictly from step 0
    */
   start() {
     this.mount();
@@ -223,24 +243,48 @@ export class TutorialComponent {
   }
 
   /**
-   * Renders the active tutorial step with spotlight, dynamic arrow, and interactive dots
+   * Renders the active tutorial step with spotlight, dynamic HUD docking, and interactive dots
    */
   renderCurrentStep() {
     const step = TUTORIAL_STEPS[this.currentStepIndex];
     if (!step) return;
 
+    const isMobile = window.innerWidth < 768;
+    const shouldOpenDrawer = isMobile
+      ? (step.mobileDrawerOpen || Boolean(step.drawerTab))
+      : Boolean(step.drawerTab);
+
     // 1. Manage Drawer collapse / expand based on step requirement
     const drawer = document.getElementById('app-drawer');
-    if (step.drawerTab) {
+    if (shouldOpenDrawer) {
       if (drawer && drawer.classList.contains('-translate-x-full')) {
         drawer.classList.remove('-translate-x-full');
       }
-      const tabBtn = document.querySelector(`.tab-btn[data-tab="${step.drawerTab}"]`);
-      if (tabBtn) tabBtn.click();
+      if (step.drawerTab) {
+        const tabBtn = document.querySelector(`.tab-btn[data-tab="${step.drawerTab}"]`);
+        if (tabBtn) tabBtn.click();
+      }
     } else {
-      // If step targets external controls (e.g. top header or bottom water slider), collapse drawer
       if (drawer && !drawer.classList.contains('-translate-x-full')) {
         drawer.classList.add('-translate-x-full');
+      }
+    }
+
+    // Expand bottom water simulation dock if Step 4 is active and dock was minimized
+    if (step.stepIndex === 4) {
+      const btnExpand = document.getElementById('btn-toggle-dock-expand');
+      if (btnExpand && btnExpand.offsetParent !== null) {
+        btnExpand.click();
+      }
+    }
+
+    // Auto-scroll target into view if nested inside drawer
+    const targetEl = this._resolveTarget(step);
+    if (targetEl && targetEl.closest('#app-drawer') && typeof targetEl.scrollIntoView === 'function') {
+      try {
+        targetEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } catch {
+        // Safe fallback
       }
     }
 
@@ -271,7 +315,7 @@ export class TutorialComponent {
     // 4. Update progress dots as interactive buttons
     if (this.progressDotsContainer) {
       this.progressDotsContainer.innerHTML = TUTORIAL_STEPS.map((_, i) => `
-        <button type="button" class="tutorial-dot-btn h-2 rounded-full transition-all cursor-pointer focus:outline-none ${i === this.currentStepIndex ? 'w-6 bg-sky-600' : 'w-2 bg-slate-300 hover:bg-slate-400'}" data-step-index="${i}" title="Beralih langsung ke Langkah ${i + 1}">
+        <button type="button" class="tutorial-dot-btn h-2 rounded-full transition-all cursor-pointer focus:outline-none ${i === this.currentStepIndex ? 'w-5 sm:w-6 bg-sky-600' : 'w-2 bg-slate-300 hover:bg-slate-400'}" data-step-index="${i}" title="Beralih langsung ke Langkah ${i + 1}">
           <span class="sr-only">Langkah ${i + 1}</span>
         </button>
       `).join('');
@@ -289,7 +333,7 @@ export class TutorialComponent {
     }
 
     // 5. Compute Spotlight Cutout & Popover Alignment
-    // Dual positioning: fast preliminary position + accurate lock-in after 300ms CSS drawer transition
+    // Dual positioning: preliminary fast pass + accurate lock-in after CSS transitions settle
     setTimeout(() => {
       this._positionSpotlightAndCard(step);
     }, PRELIMINARY_ALIGN_DELAY_MS);
@@ -305,7 +349,7 @@ export class TutorialComponent {
    * @private
    */
   _positionSpotlightAndCard(step) {
-    const targetEl = document.querySelector(step.targetSelector);
+    const targetEl = this._resolveTarget(step);
 
     let targetRect = {
       x: window.innerWidth / 2 - 100,
@@ -316,28 +360,30 @@ export class TutorialComponent {
 
     if (targetEl) {
       const r = targetEl.getBoundingClientRect();
-      targetRect = {
-        x: Math.max(0, r.left - SPOTLIGHT_PADDING_PX),
-        y: Math.max(0, r.top - SPOTLIGHT_PADDING_PX),
-        width: r.width + SPOTLIGHT_PADDING_PX * 2,
-        height: r.height + SPOTLIGHT_PADDING_PX * 2
-      };
+      if (r.width > 0 && r.height > 0) {
+        targetRect = {
+          x: Math.max(0, r.left - SPOTLIGHT_PADDING_PX),
+          y: Math.max(0, r.top - SPOTLIGHT_PADDING_PX),
+          width: r.width + SPOTLIGHT_PADDING_PX * 2,
+          height: r.height + SPOTLIGHT_PADDING_PX * 2
+        };
+      }
     }
 
     // Update SVG Spotlight Cutout Rect
     if (this.cutoutRect) {
-      this.cutoutRect.setAttribute('x', targetRect.x);
-      this.cutoutRect.setAttribute('y', targetRect.y);
-      this.cutoutRect.setAttribute('width', targetRect.width);
-      this.cutoutRect.setAttribute('height', targetRect.height);
+      this.cutoutRect.setAttribute('x', Math.round(targetRect.x).toString());
+      this.cutoutRect.setAttribute('y', Math.round(targetRect.y).toString());
+      this.cutoutRect.setAttribute('width', Math.round(targetRect.width).toString());
+      this.cutoutRect.setAttribute('height', Math.round(targetRect.height).toString());
     }
 
     // Update Pulsing Highlight Ring
     if (this.highlightRing) {
-      this.highlightRing.style.left = `${targetRect.x}px`;
-      this.highlightRing.style.top = `${targetRect.y}px`;
-      this.highlightRing.style.width = `${targetRect.width}px`;
-      this.highlightRing.style.height = `${targetRect.height}px`;
+      this.highlightRing.style.left = `${Math.round(targetRect.x)}px`;
+      this.highlightRing.style.top = `${Math.round(targetRect.y)}px`;
+      this.highlightRing.style.width = `${Math.round(targetRect.width)}px`;
+      this.highlightRing.style.height = `${Math.round(targetRect.height)}px`;
     }
 
     // Position Popover Card intelligently relative to targetRect
@@ -346,6 +392,7 @@ export class TutorialComponent {
 
   /**
    * Calculates popover card coordinates relative to target bounding box
+   * Implements Dual-Dock Mobile HUD architecture for viewports < 640px.
    * @param {Object} targetRect
    * @param {'top'|'bottom'|'left'|'right'} preferredPosition
    * @private
@@ -353,64 +400,99 @@ export class TutorialComponent {
   _positionPopoverCard(targetRect, preferredPosition) {
     if (!this.popoverCard) return;
 
-    const cardRect = this.popoverCard.getBoundingClientRect();
-    const cardWidth = cardRect.width || DEFAULT_CARD_WIDTH_PX;
-    const cardHeight = cardRect.height || DEFAULT_CARD_HEIGHT_PX;
-
     const viewportW = window.innerWidth;
     const viewportH = window.innerHeight;
+    const isMobile = viewportW < MOBILE_BREAKPOINT_PX;
 
-    let position = preferredPosition;
+    const cardRect = this.popoverCard.getBoundingClientRect();
+    const cardWidth = Math.min(cardRect.width || DEFAULT_CARD_WIDTH_PX, viewportW - VIEWPORT_MARGIN_PX * 2);
+    const cardHeight = cardRect.height || DEFAULT_CARD_HEIGHT_PX;
 
-    // Responsive fallback for narrow screens
-    if (position === 'right' && (targetRect.x + targetRect.width + POPOVER_GAP_PX + cardWidth > viewportW - VIEWPORT_MARGIN_PX)) {
-      if (targetRect.y + targetRect.height + POPOVER_GAP_PX + cardHeight <= viewportH - VIEWPORT_MARGIN_PX) {
-        position = 'bottom';
-      } else if (targetRect.y - cardHeight - POPOVER_GAP_PX >= VIEWPORT_MARGIN_PX) {
-        position = 'top';
-      }
-    }
+    // Apply computed width directly for tight mobile boundary compliance
+    this.popoverCard.style.width = `${Math.round(cardWidth)}px`;
 
     let left = 0;
     let top = 0;
+    let computedPosition = preferredPosition;
 
-    if (position === 'bottom') {
-      top = targetRect.y + targetRect.height + POPOVER_GAP_PX;
-      left = targetRect.x + targetRect.width / 2 - cardWidth / 2;
-    } else if (position === 'top') {
-      top = targetRect.y - cardHeight - POPOVER_GAP_PX;
-      left = targetRect.x + targetRect.width / 2 - cardWidth / 2;
-    } else if (position === 'right') {
-      left = targetRect.x + targetRect.width + POPOVER_GAP_PX;
-      top = targetRect.y + targetRect.height / 2 - cardHeight / 2;
+    if (isMobile) {
+      // DUAL-DOCK MOBILE HUD ARCHITECTURE:
+      // When target is in lower half of screen (e.g. water simulation slider), dock card at top.
+      // When target is in upper half of screen (e.g. drawer tabs or items), dock card at bottom.
+      const targetCenterY = targetRect.y + targetRect.height / 2;
+      const isTargetInLowerHalf = targetCenterY > viewportH * 0.48;
+
+      // Center card horizontally on mobile
+      left = Math.max(VIEWPORT_MARGIN_PX, (viewportW - cardWidth) / 2);
+
+      if (isTargetInLowerHalf) {
+        // Dock at screen top
+        computedPosition = 'top-dock';
+        top = Math.max(VIEWPORT_MARGIN_PX, 16);
+      } else {
+        // Dock at screen bottom
+        computedPosition = 'bottom-dock';
+        top = viewportH - cardHeight - Math.max(VIEWPORT_MARGIN_PX, 16);
+      }
     } else {
-      left = targetRect.x - cardWidth - POPOVER_GAP_PX;
-      top = targetRect.y + targetRect.height / 2 - cardHeight / 2;
-    }
+      // DESKTOP ANCHORED TOOLTIP ARCHITECTURE
+      let position = preferredPosition;
 
-    // Clamp coordinates so card never overflows the screen edges
-    if (left + cardWidth > viewportW - VIEWPORT_MARGIN_PX) {
-      left = viewportW - cardWidth - VIEWPORT_MARGIN_PX;
-    }
-    if (left < VIEWPORT_MARGIN_PX) {
-      left = VIEWPORT_MARGIN_PX;
-    }
-    if (top + cardHeight > viewportH - VIEWPORT_MARGIN_PX) {
-      top = viewportH - cardHeight - VIEWPORT_MARGIN_PX;
-    }
-    if (top < VIEWPORT_MARGIN_PX) {
-      top = VIEWPORT_MARGIN_PX;
+      // Responsive fallback when anchored to the right but overflows right edge
+      if (position === 'right' && (targetRect.x + targetRect.width + POPOVER_GAP_PX + cardWidth > viewportW - VIEWPORT_MARGIN_PX)) {
+        if (targetRect.y + targetRect.height + POPOVER_GAP_PX + cardHeight <= viewportH - VIEWPORT_MARGIN_PX) {
+          position = 'bottom';
+        } else if (targetRect.y - cardHeight - POPOVER_GAP_PX >= VIEWPORT_MARGIN_PX) {
+          position = 'top';
+        }
+      }
+
+      if (position === 'bottom') {
+        top = targetRect.y + targetRect.height + POPOVER_GAP_PX;
+        left = targetRect.x + targetRect.width / 2 - cardWidth / 2;
+      } else if (position === 'top') {
+        top = targetRect.y - cardHeight - POPOVER_GAP_PX;
+        left = targetRect.x + targetRect.width / 2 - cardWidth / 2;
+      } else if (position === 'right') {
+        left = targetRect.x + targetRect.width + POPOVER_GAP_PX;
+        top = targetRect.y + targetRect.height / 2 - cardHeight / 2;
+      } else {
+        left = targetRect.x - cardWidth - POPOVER_GAP_PX;
+        top = targetRect.y + targetRect.height / 2 - cardHeight / 2;
+      }
+
+      // Clamp coordinates so card never overflows the screen edges
+      if (left + cardWidth > viewportW - VIEWPORT_MARGIN_PX) {
+        left = viewportW - cardWidth - VIEWPORT_MARGIN_PX;
+      }
+      if (left < VIEWPORT_MARGIN_PX) {
+        left = VIEWPORT_MARGIN_PX;
+      }
+      if (top + cardHeight > viewportH - VIEWPORT_MARGIN_PX) {
+        top = viewportH - cardHeight - VIEWPORT_MARGIN_PX;
+      }
+      if (top < VIEWPORT_MARGIN_PX) {
+        top = VIEWPORT_MARGIN_PX;
+      }
+
+      computedPosition = position;
     }
 
     this.popoverCard.style.left = `${Math.round(left)}px`;
     this.popoverCard.style.top = `${Math.round(top)}px`;
 
     // Dynamically position caret arrow pointing towards target
-    this._updateArrow(position, targetRect, left, top, cardWidth, cardHeight);
+    this._updateArrow(computedPosition, targetRect, left, top, cardWidth, cardHeight);
   }
 
   /**
    * Positions geometric caret arrow indicator towards target element center
+   * @param {string} position
+   * @param {Object} targetRect
+   * @param {number} cardLeft
+   * @param {number} cardTop
+   * @param {number} cardWidth
+   * @param {number} cardHeight
    * @private
    */
   _updateArrow(position, targetRect, cardLeft, cardTop, cardWidth, cardHeight) {
@@ -423,29 +505,42 @@ export class TutorialComponent {
     arrow.style.top = '';
     arrow.style.bottom = '';
 
-    if (position === 'bottom') {
+    const targetCenterX = targetRect.x + targetRect.width / 2;
+    const targetCenterY = targetRect.y + targetRect.height / 2;
+
+    if (position === 'bottom' || position === 'bottom-dock') {
+      // Arrow is on the top edge of the card, pointing upwards toward target
       arrow.className = 'arrow-top';
       arrow.style.top = '-7px';
-      const targetCenterX = targetRect.x + targetRect.width / 2;
-      const offset = Math.min(Math.max(targetCenterX - cardLeft - ARROW_HALF_SIZE_PX, ARROW_CLAMP_MIN_PX), cardWidth - ARROW_CLAMP_OFFSET_PX);
+      const offset = Math.min(
+        Math.max(targetCenterX - cardLeft - ARROW_HALF_SIZE_PX, ARROW_CLAMP_MIN_PX),
+        cardWidth - ARROW_CLAMP_OFFSET_PX
+      );
       arrow.style.left = `${Math.round(offset)}px`;
-    } else if (position === 'top') {
+    } else if (position === 'top' || position === 'top-dock') {
+      // Arrow is on the bottom edge of the card, pointing downwards toward target
       arrow.className = 'arrow-bottom';
       arrow.style.bottom = '-7px';
-      const targetCenterX = targetRect.x + targetRect.width / 2;
-      const offset = Math.min(Math.max(targetCenterX - cardLeft - ARROW_HALF_SIZE_PX, ARROW_CLAMP_MIN_PX), cardWidth - ARROW_CLAMP_OFFSET_PX);
+      const offset = Math.min(
+        Math.max(targetCenterX - cardLeft - ARROW_HALF_SIZE_PX, ARROW_CLAMP_MIN_PX),
+        cardWidth - ARROW_CLAMP_OFFSET_PX
+      );
       arrow.style.left = `${Math.round(offset)}px`;
     } else if (position === 'right') {
       arrow.className = 'arrow-left';
       arrow.style.left = '-7px';
-      const targetCenterY = targetRect.y + targetRect.height / 2;
-      const offset = Math.min(Math.max(targetCenterY - cardTop - ARROW_HALF_SIZE_PX, ARROW_CLAMP_MIN_PX), cardHeight - ARROW_CLAMP_OFFSET_PX);
+      const offset = Math.min(
+        Math.max(targetCenterY - cardTop - ARROW_HALF_SIZE_PX, ARROW_CLAMP_MIN_PX),
+        cardHeight - ARROW_CLAMP_OFFSET_PX
+      );
       arrow.style.top = `${Math.round(offset)}px`;
     } else {
       arrow.className = 'arrow-right';
       arrow.style.right = '-7px';
-      const targetCenterY = targetRect.y + targetRect.height / 2;
-      const offset = Math.min(Math.max(targetCenterY - cardTop - ARROW_HALF_SIZE_PX, ARROW_CLAMP_MIN_PX), cardHeight - ARROW_CLAMP_OFFSET_PX);
+      const offset = Math.min(
+        Math.max(targetCenterY - cardTop - ARROW_HALF_SIZE_PX, ARROW_CLAMP_MIN_PX),
+        cardHeight - ARROW_CLAMP_OFFSET_PX
+      );
       arrow.style.top = `${Math.round(offset)}px`;
     }
   }
@@ -468,7 +563,6 @@ export class TutorialComponent {
       e.preventDefault();
       this.prev();
     } else if (e.key === 'Enter') {
-      // If a button is focused, native button click already handles it; avoid duplicate step advance
       if (document.activeElement && document.activeElement.tagName === 'BUTTON') {
         return;
       }

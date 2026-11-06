@@ -216,8 +216,10 @@ html, body {
   color: #0f172a !important;
   border: 1px solid #e2e8f0 !important;
   box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.45), 0 0 0 1px rgba(0, 0, 0, 0.08) !important;
+  will-change: left, top;
   transition: left 0.35s cubic-bezier(0.16, 1, 0.3, 1),
               top 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              width 0.25s ease-out,
               transform 0.25s ease-out;
 }
 
