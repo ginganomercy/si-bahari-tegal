@@ -18,6 +18,19 @@ export class CameraController {
   }
 
   /**
+   * Helper to compute safe viewport padding for camera transitions
+   * Offsets the projection on mobile so targets are centered above bottom floating UI
+   * @private
+   * @returns {maplibregl.PaddingOptions}
+   */
+  _getViewportPadding() {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      return { top: 68, bottom: 120, left: 0, right: 0 };
+    }
+    return { top: 0, bottom: 0, left: 0, right: 0 };
+  }
+
+  /**
    * Flies camera to designated major zone with cinematic transition
    * @param {'KOTA_TEGAL'|'GUCI_BUMIJAWA'} zoneKey
    */
@@ -26,11 +39,13 @@ export class CameraController {
     if (!preset) return;
 
     this.activeZone = zoneKey;
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
     this.map.flyTo({
       center: preset.center,
-      zoom: preset.zoom,
+      zoom: isMobile ? preset.zoom - 0.25 : preset.zoom,
       pitch: preset.pitch,
       bearing: preset.bearing,
+      padding: this._getViewportPadding(),
       essential: true,
       duration: 2200,
       curve: 1.35
@@ -49,6 +64,7 @@ export class CameraController {
       zoom: zoom,
       pitch: pitch,
       bearing: (Math.random() - 0.5) * 40,
+      padding: this._getViewportPadding(),
       essential: true,
       duration: 1800
     });

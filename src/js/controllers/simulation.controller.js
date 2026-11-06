@@ -130,6 +130,11 @@ export class SimulationController {
     // Initial render
     this.setPumpStatus(true);
     this.onElevationChange(WATER_SIMULATION_CONFIG.DEFAULT_ELEVATION_M);
+
+    // On mobile viewports (< 768px), default dock to minimized capsule pill to maximize map visibility
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      this.toggleDock(true);
+    }
   }
 
   /**

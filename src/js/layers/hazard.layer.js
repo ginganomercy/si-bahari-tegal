@@ -177,33 +177,39 @@ export class HazardLayer {
         }
       });
 
-      // Crisp Daylight Map Label (Light Mode High-Contrast)
+      // Crisp Daylight Map Label (Light Mode High-Contrast with Zoom-Responsive Micro-Format)
       this.map.addLayer({
         id: 'urban-risk-labels',
         type: 'symbol',
         source: this.urbanRiskLabelSourceId,
-        minzoom: 12,
+        minzoom: 12.2,
         layout: {
           'text-field': [
-            'concat',
+            'step',
+            ['zoom'],
             ['get', 'nama_kelurahan'],
-            '\n',
-            ['to-string', ['get', 'elevasi_rata_m']],
-            ' mdpl'
+            14.2,
+            [
+              'concat',
+              ['get', 'nama_kelurahan'],
+              '\n',
+              ['to-string', ['get', 'elevasi_rata_m']],
+              ' mdpl'
+            ]
           ],
           'text-font': ['Open Sans Semibold'],
           'text-size': [
             'interpolate',
             ['linear'],
             ['zoom'],
-            12, 10.5,
-            15, 13
+            12.2, 10,
+            15, 12.5
           ],
           'text-anchor': 'center',
           'text-allow-overlap': false,
           'text-ignore-placement': false,
           'symbol-avoid-edges': true,
-          'text-variable-anchor': ['center', 'top', 'bottom', 'left', 'right'],
+          'text-variable-anchor': ['center', 'top', 'bottom'],
           'text-radial-offset': 0.5,
           'text-justify': 'center'
         },
@@ -282,24 +288,30 @@ export class HazardLayer {
         id: 'guci-risk-labels',
         type: 'symbol',
         source: this.guciRiskLabelSourceId,
-        minzoom: 11,
+        minzoom: 11.5,
         layout: {
           'text-field': [
-            'concat',
-            ['get', 'nama_desa'],
-            '\nElev: ',
-            ['to-string', ['get', 'elevasi_rata_m']],
-            ' mdpl (Slope ',
-            ['to-string', ['get', 'kemiringan_lereng_derajat']],
-            '°)'
+            'step',
+            ['zoom'],
+            ['concat', ['get', 'nama_desa'], ' (', ['to-string', ['get', 'elevasi_rata_m']], 'm)'],
+            13.5,
+            [
+              'concat',
+              ['get', 'nama_desa'],
+              '\nElev: ',
+              ['to-string', ['get', 'elevasi_rata_m']],
+              ' mdpl (Slope ',
+              ['to-string', ['get', 'kemiringan_lereng_derajat']],
+              '°)'
+            ]
           ],
           'text-font': ['Open Sans Semibold'],
-          'text-size': 11.5,
+          'text-size': 11.0,
           'text-anchor': 'center',
           'text-allow-overlap': false,
           'text-ignore-placement': false,
           'symbol-avoid-edges': true,
-          'text-variable-anchor': ['center', 'top', 'bottom', 'left', 'right'],
+          'text-variable-anchor': ['center', 'top', 'bottom'],
           'text-radial-offset': 0.5,
           'text-justify': 'center'
         },
@@ -342,7 +354,13 @@ export class HazardLayer {
         type: 'circle',
         source: this.drainageSourceId,
         paint: {
-          'circle-radius': 13,
+          'circle-radius': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            12, 7.5,
+            15, 13
+          ],
           'circle-color': [
             'case',
             ['>=', ['get', 'sediment_depth_cm'], 60.0],
@@ -359,7 +377,13 @@ export class HazardLayer {
         type: 'circle',
         source: this.drainageSourceId,
         paint: {
-          'circle-radius': 6.5,
+          'circle-radius': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            12, 4.0,
+            15, 6.5
+          ],
           'circle-color': [
             'case',
             ['>=', ['get', 'sediment_depth_cm'], 60.0],
@@ -432,21 +456,27 @@ export class HazardLayer {
         }
       });
 
-      // Subsidence Label (Strict Anti-Overlap via Single-Centroid Point Source)
+      // Subsidence Label (Strict Anti-Overlap via Zoom-Responsive Micro-Format)
       this.map.addLayer({
         id: 'subsidence-labels',
         type: 'symbol',
         source: this.subsidenceLabelSourceId,
-        minzoom: 12,
+        minzoom: 12.5,
         layout: {
           'visibility': 'none',
           'text-field': [
-            'concat',
-            'Amblesan: ',
-            ['get', 'nama_zona'],
-            '\nLaju: ',
-            ['to-string', ['get', 'laju_penurunan_cm_tahun']],
-            ' cm/th'
+            'step',
+            ['zoom'],
+            ['concat', 'Amblesan: ', ['to-string', ['get', 'laju_penurunan_cm_tahun']], ' cm/th'],
+            14.5,
+            [
+              'concat',
+              'Amblesan: ',
+              ['get', 'nama_zona'],
+              '\nLaju: ',
+              ['to-string', ['get', 'laju_penurunan_cm_tahun']],
+              ' cm/th'
+            ]
           ],
           'text-font': ['Open Sans Semibold'],
           'text-size': 10.5,
@@ -455,7 +485,7 @@ export class HazardLayer {
           'text-allow-overlap': false,
           'text-ignore-placement': false,
           'symbol-avoid-edges': true,
-          'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+          'text-variable-anchor': ['top', 'bottom'],
           'text-radial-offset': 0.5,
           'text-justify': 'center'
         },
@@ -523,20 +553,26 @@ export class HazardLayer {
         }
       });
 
-      // Label (Strict Anti-Overlap via Single-Centroid Point Source)
+      // Label (Strict Anti-Overlap via Zoom-Responsive Micro-Format)
       this.map.addLayer({
         id: 'saline-labels',
         type: 'symbol',
         source: this.salineLabelSourceId,
-        minzoom: 12,
+        minzoom: 12.5,
         layout: {
           'visibility': 'none',
           'text-field': [
-            'concat',
-            ['get', 'nama_zona'],
-            '\nSalinitas: ',
-            ['to-string', ['get', 'salinitas_air_tanah_ppt']],
-            ' ppt'
+            'step',
+            ['zoom'],
+            ['concat', 'Intrusi Asin: ', ['to-string', ['get', 'salinitas_air_tanah_ppt']], ' ppt'],
+            14.5,
+            [
+              'concat',
+              ['get', 'nama_zona'],
+              '\nSalinitas: ',
+              ['to-string', ['get', 'salinitas_air_tanah_ppt']],
+              ' ppt'
+            ]
           ],
           'text-font': ['Open Sans Semibold'],
           'text-size': 10.5,
@@ -545,7 +581,7 @@ export class HazardLayer {
           'text-allow-overlap': false,
           'text-ignore-placement': false,
           'symbol-avoid-edges': true,
-          'text-variable-anchor': ['bottom', 'top', 'left', 'right'],
+          'text-variable-anchor': ['bottom', 'top'],
           'text-radial-offset': 0.5,
           'text-justify': 'center'
         },
@@ -586,7 +622,13 @@ export class HazardLayer {
         type: 'circle',
         source: this.wasteSourceId,
         paint: {
-          'circle-radius': 13,
+          'circle-radius': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            12, 7.5,
+            15, 13
+          ],
           'circle-color': CAUSAL_HAZARD_CONSTANTS.SOLID_WASTE_BOTTLENECKS.COLOR_MARKER,
           'circle-opacity': 0.35
         }
@@ -598,7 +640,13 @@ export class HazardLayer {
         type: 'circle',
         source: this.wasteSourceId,
         paint: {
-          'circle-radius': 6.5,
+          'circle-radius': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            12, 4.0,
+            15, 6.5
+          ],
           'circle-color': '#c2410c',
           'circle-stroke-width': 2.0,
           'circle-stroke-color': '#ffffff'

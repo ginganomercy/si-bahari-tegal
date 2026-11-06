@@ -59,9 +59,12 @@ export class TerrainManager {
         ]
       },
       center: initial.center,
-      zoom: initial.zoom,
+      zoom: typeof window !== 'undefined' && window.innerWidth < 768 ? initial.zoom - 0.25 : initial.zoom,
       pitch: initial.pitch,
       bearing: initial.bearing,
+      padding: typeof window !== 'undefined' && window.innerWidth < 768
+        ? { top: 68, bottom: 120, left: 0, right: 0 }
+        : { top: 0, bottom: 0, left: 0, right: 0 },
       maxPitch: 80,
       maxZoom: 21,
       renderWorldCopies: false,

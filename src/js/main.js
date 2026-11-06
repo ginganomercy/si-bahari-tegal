@@ -351,9 +351,9 @@ function _setupDrawerTabs() {
       const targetTabId = btn.getAttribute('data-tab');
 
       tabButtons.forEach(b => {
-        b.className = 'tab-btn flex-1 py-3 text-xs font-semibold text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex flex-col items-center gap-1.5 transition-all';
+        b.className = 'tab-btn flex-1 py-2.5 px-1 text-xs font-semibold text-slate-500 hover:text-slate-800 border-b-2 border-transparent flex flex-col items-center gap-1 transition-all';
       });
-      btn.className = 'tab-btn active flex-1 py-3 text-xs font-bold text-sky-600 border-b-2 border-sky-600 bg-white flex flex-col items-center gap-1.5 transition-all';
+      btn.className = 'tab-btn active flex-1 py-2.5 px-1 text-xs font-bold text-sky-600 border-b-2 border-sky-600 bg-white flex flex-col items-center gap-1 transition-all';
 
       tabPanes.forEach(pane => {
         if (pane.id === targetTabId) {
